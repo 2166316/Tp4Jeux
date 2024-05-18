@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Playercam : MonoBehaviour
 {
-    private float sensX;
-    private float sensY;
+    private float sensX = 200f;
+    private float sensY = 200f;
 
-    public Transform orientation;
+    //public Transform orientation;
+    public GameObject player;
 
     private float xRotation;
     private float yRotation;
@@ -28,6 +29,8 @@ public class Playercam : MonoBehaviour
         xRotation += mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        player.GetComponent<Transform>().rotation = Quaternion.Euler(0, yRotation, 0);
+        //orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        //transform.position = player.GetComponent<Transform>().position + new Vector3(0, 3.5f, 0);
     }
 }
