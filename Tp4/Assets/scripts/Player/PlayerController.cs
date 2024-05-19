@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float jumpForce = 5f; // Adjust this value to control the jump height
+    public float jumpForce = 5f; 
 
     private Rigidbody rb;
 
@@ -30,9 +30,8 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        // Raycast to check if the player is grounded
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
             return true;
         }
