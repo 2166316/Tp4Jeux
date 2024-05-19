@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private float moveSpeed = 20f;
-    private float moveSpeedY = 5f;
     private float moveX;
     private float moveY;
 
@@ -18,14 +17,24 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        orientation = GetComponent<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    void FixedUpdate()
+    {
         moveX = Input.GetAxisRaw("Horizontal");
         moveY = Input.GetAxisRaw("Vertical");
 
         moveDirection = orientation.forward * moveY + orientation.right * moveX;
+
+        moveDirection = moveDirection.normalized;
+
+        rb.velocity = moveDirection * moveSpeed;
     }
 }
