@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Destination
   - Clown
+  - Object
+  - Key
   layers:
   - Default
   - TransparentFX
