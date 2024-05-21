@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 5f; 
 
     private Rigidbody rb;
+    private Animator animator;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -21,6 +23,9 @@ public class PlayerController : MonoBehaviour
 
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
+
+        float speed = movement.magnitude / moveSpeed;
+        animator.SetFloat("movespeed", speed);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
