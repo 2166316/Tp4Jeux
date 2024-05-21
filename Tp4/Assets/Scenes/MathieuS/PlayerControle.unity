@@ -190,6 +190,9 @@ PrefabInstance:
       addedObject: {fileID: 1122125709}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac8c83ef94db8dc459f47d291588f44f, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1122125712}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac8c83ef94db8dc459f47d291588f44f, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1122125710}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac8c83ef94db8dc459f47d291588f44f, type: 3}
       insertIndex: -1
@@ -564,7 +567,7 @@ Transform:
   m_GameObject: {fileID: 485451238}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.028, y: 3.47, z: -1.754}
+  m_LocalPosition: {x: 0.028, y: 3.47, z: 0.206}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -866,6 +869,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1122125712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122125706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 354688756adf0e54cbb941fa2ee13511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightMaterial: {fileID: 2100000, guid: 26e9ae3cc5e653e44a82fb25d8e2a292, type: 2}
 --- !u!1 &1228421315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,7 +1180,7 @@ Transform:
   m_GameObject: {fileID: 2084745388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.24, y: 4.14, z: 2.84}
+  m_LocalPosition: {x: 36.24, y: 3.22, z: 2.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
