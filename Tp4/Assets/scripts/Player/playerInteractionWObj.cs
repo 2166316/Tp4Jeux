@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class playerInteractionWObj : MonoBehaviour
+public class playerInteractionWObj : NetworkBehaviour
 {
     public Material highlightMaterial;
     private Material originalMaterial;

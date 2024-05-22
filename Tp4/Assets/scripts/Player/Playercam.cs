@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Playercam : MonoBehaviour
+public class Playercam : NetworkBehaviour
 {
     private float sensitivity = 100f;
     public GameObject player;

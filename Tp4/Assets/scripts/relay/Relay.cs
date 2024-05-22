@@ -6,7 +6,7 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 
-public class Relay : MonoBehaviour
+public class Relay : NetworkBehaviour
 {
     private int nbPlayerMax = 4;
 
@@ -21,6 +21,15 @@ public class Relay : MonoBehaviour
             Debug.Log("Player signed in :" + AuthenticationService.Instance.PlayerId);
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("f");
+            CreateRelay();
+        }
     }
 
     //création du relay et du host
