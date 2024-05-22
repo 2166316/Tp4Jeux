@@ -5,10 +5,12 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Collections;
 
 public class Relay : NetworkBehaviour
 {
     private int nbPlayerMax = 4;
+    private NetworkVariable<FixedString4096Bytes> codeConnexion = new();
 
     // Start is called before the first frame update
     async void Start()
@@ -25,12 +27,24 @@ public class Relay : NetworkBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            Debug.Log("f");
+            
             CreateRelay();
         }
+
+       /* if (Input.GetKeyDown(KeyCode.C))
+        {
+           
+            JoinRelay("");
+        }*/
     }
+
+    [Rpc(SendTo.Server)]
+    public void ChangeCodeRpc(string connexionCode) {
+        codeConnexion.Value = connexionCode;
+    }
+
 
     //création du relay et du host
     public async void CreateRelay()
@@ -41,6 +55,7 @@ public class Relay : NetworkBehaviour
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(nbPlayerMax);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            ChangeCodeRpc(joinCode);
             Debug.Log("Code pour rejoindre: "+joinCode);
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
@@ -51,11 +66,7 @@ public class Relay : NetworkBehaviour
                     allocation.ConnectionData
 
                 );
-
             NetworkManager.Singleton.StartHost();
-
-
-
         }
         catch(RelayServiceException ex)
         {
@@ -68,6 +79,8 @@ public class Relay : NetworkBehaviour
     {
         try
         {
+            //temporairement automatique
+            joinCode = codeConnexion.Value.ToString();
             Debug.Log("Client join avec le code: " + joinCode);
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 

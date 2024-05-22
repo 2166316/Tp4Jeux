@@ -11,7 +11,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody rb;
     private Animator animator;
 
-    private Vector3 spawnPoint = new Vector3(1.8f, 65f, -171f);
+    private Vector3 spawnPoint = new Vector3(1.8f, 65f, -168f);
     private NetworkVariable<Vector3> posNetwork = new();
 
     void Start()
@@ -41,6 +41,9 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
+        if(!IsOwner)
+            return;
+
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
