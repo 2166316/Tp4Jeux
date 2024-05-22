@@ -6,11 +6,16 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Collections;
+using UnityEngine.UI;
+
 
 public class Relay : NetworkBehaviour
 {
-    private int nbPlayerMax = 4;
-    private NetworkVariable<FixedString4096Bytes> codeConnexion = new();
+    [SerializeField] private TMPro.TMP_Text textVal;
+    [SerializeField] private Button loginButton;
+    [SerializeField] private Button hostButton;
+    [SerializeField] private int nbPlayerMax = 4;
+    [SerializeField] private NetworkVariable<FixedString4096Bytes> codeConnexion = new NetworkVariable<FixedString4096Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     // Start is called before the first frame update
     async void Start()
@@ -20,24 +25,28 @@ public class Relay : NetworkBehaviour
         //callback
         AuthenticationService.Instance.SignedIn += () =>
         {
-            Debug.Log("Player signed in :" + AuthenticationService.Instance.PlayerId);
+            Debug.Log("Player avec le id:" + AuthenticationService.Instance.PlayerId);
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        loginButton.onClick.AddListener(() =>
+        {
+            Debug.Log(textVal.text);
+            
+             JoinRelay(textVal.text);
+            
+        });
+
+        hostButton.onClick.AddListener(() =>
+        {
+            Debug.Log("click");
+            CreateRelay();
+        });
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            
-            CreateRelay();
-        }
-
-       /* if (Input.GetKeyDown(KeyCode.C))
-        {
-           
-            JoinRelay("");
-        }*/
+        
     }
 
     [Rpc(SendTo.Server)]
@@ -79,8 +88,6 @@ public class Relay : NetworkBehaviour
     {
         try
         {
-            //temporairement automatique
-            joinCode = codeConnexion.Value.ToString();
             Debug.Log("Client join avec le code: " + joinCode);
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 

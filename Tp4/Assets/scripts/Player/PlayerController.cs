@@ -25,6 +25,14 @@ public class PlayerController : NetworkBehaviour
         {
             SpawnClientRPC();
         }
+
+        Camera playerCam = GetComponentInChildren<Camera>();
+        Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        if (playerCam != null)
+        {
+            debutCam.enabled = false;
+            playerCam.enabled = true;
+        }
     }
 
     public void OnCurrentSpawn(Vector3 previous, Vector3 current)
