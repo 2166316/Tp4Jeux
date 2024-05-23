@@ -24,11 +24,7 @@ public class ScaryClownController : NetworkBehaviour
     private NetworkVariable<bool> clownIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
-    [Rpc(SendTo.Server)]
-    public void ChangeClownActivityRpc()
-    {
-        clownIsActive.Value = !clownIsActive.Value;
-    }
+    
 
     public override void OnNetworkSpawn()
     {
@@ -56,20 +52,21 @@ public class ScaryClownController : NetworkBehaviour
         FindClosestPlayer();
 
         //si le clown a trouvé un player
-        if( destination != transform.position)
+        if( destination != transform.position && navAgent!=null)
         {
             navAgent.SetDestination(destination);
+
+            //ajuste l'animation selon la vitesse actuelle du clown
+            float currentSpeed = navAgent.velocity.magnitude;
+            animator.SetFloat(animatorVitesseHash, currentSpeed);
+
+            if (audioSource != null && currentSpeed > 1 && !audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
         //Debug.Log(navAgent.velocity.magnitude);
 
-        //ajuste l'animation selon la vitesse actuelle du clown
-        float currentSpeed = navAgent.velocity.magnitude;
-        animator.SetFloat(animatorVitesseHash, currentSpeed);
-
-        if(audioSource != null && currentSpeed > 1 && !audioSource.isPlaying)
-        {
-            audioSource.Play();
-        }
     }
 
     private void OnTriggerEnter(Collider other)

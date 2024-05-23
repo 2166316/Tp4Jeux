@@ -10,6 +10,7 @@ public class SpawnClownAI : NetworkBehaviour
 
     private List<Vector3> listDePositionPredefiniePourClown;
     private GameObject clownAINetworkObjectRef;
+    private NetworkVariable<bool> clownIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
     {
@@ -24,6 +25,18 @@ public class SpawnClownAI : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
+    [Rpc(SendTo.Server)]
+    public void ChangeClownActivityTrueRpc()
+    {
+        clownIsActive.Value = true;
+    }
+
+    [Rpc(SendTo.Server)]
+    public void ChangeClownActivityFalseRpc()
+    {
+        clownIsActive.Value = false;
+    }
+
     private void InstantieClown()
     {
         int position = Random.Range(0, listDePositionPredefiniePourClown.Count);
@@ -33,7 +46,7 @@ public class SpawnClownAI : NetworkBehaviour
         //met le clown à actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
         //controllerClown.ChangeClownActivityRpc();
-
+        ChangeClownActivityTrueRpc();
         NetworkObject networkObject = clownAINetworkObjectRef.GetComponent<NetworkObject>();
         if (networkObject != null)
         {
@@ -43,18 +56,32 @@ public class SpawnClownAI : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (!IsServer)
+            return;
+        
+
+        if (other.tag == "Player")
         {
-            if (object.Equals(clownAINetworkObjectRef, null)){
+           
+            if (!clownIsActive.Value)
+            {
                 StartCoroutine(spawnClownAtRandomMoment());
+                ChangeClownActivityTrueRpc();
+                
             }     
+        }
+
+        if (other.tag == "Clown")
+        {
+            ChangeClownActivityFalseRpc();
         }
     }
 
     private IEnumerator spawnClownAtRandomMoment()
     {
-        int tempEnSecondes = Random.Range(1, 5);
-
+        // int tempEnSecondes = Random.Range(15, 61);
+        int tempEnSecondes = Random.Range(5, 10);
+        Debug.Log(tempEnSecondes);
         yield return new WaitForSeconds(tempEnSecondes);
         InstantieClown();
     }

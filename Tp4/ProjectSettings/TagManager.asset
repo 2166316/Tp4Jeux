@@ -9,6 +9,7 @@ TagManager:
   - Object
   - Key
   - ConnectionCodeInput
+  - ClownStart
   layers:
   - Default
   - TransparentFX
