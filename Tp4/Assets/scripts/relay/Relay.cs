@@ -7,6 +7,7 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Collections;
 using UnityEngine.UI;
+using Unity.Networking.Transport.Relay;
 
 
 public class Relay : NetworkBehaviour
@@ -32,14 +33,12 @@ public class Relay : NetworkBehaviour
         loginButton.onClick.AddListener(() =>
         {
             Debug.Log(textVal.text);
-            
-             JoinRelay(textVal.text);
+            JoinRelay(textVal.text);
             
         });
 
         hostButton.onClick.AddListener(() =>
         {
-            Debug.Log("click");
             CreateRelay();
         });
     }
@@ -67,14 +66,9 @@ public class Relay : NetworkBehaviour
             ChangeCodeRpc(joinCode);
             Debug.Log("Code pour rejoindre: "+joinCode);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
-                    allocation.RelayServer.IpV4,
-                    (ushort)allocation.RelayServer.Port,
-                    allocation.AllocationIdBytes,
-                    allocation.Key,
-                    allocation.ConnectionData
+            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-                );
             NetworkManager.Singleton.StartHost();
         }
         catch(RelayServiceException ex)
@@ -89,16 +83,13 @@ public class Relay : NetworkBehaviour
         try
         {
             Debug.Log("Client join avec le code: " + joinCode);
+
+            //si on lit le texte d'un TMpro ca rajoute un blankspace donc l'enlever sinon erreur 400
+            joinCode = joinCode.Substring(0, 6);
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
-                    joinAllocation.RelayServer.IpV4,
-                    (ushort)joinAllocation.RelayServer.Port,
-                    joinAllocation.AllocationIdBytes,
-                    joinAllocation.Key,
-                    joinAllocation.ConnectionData,
-                    joinAllocation.HostConnectionData
-                );
+            RelayServerData relayServerData = new RelayServerData(joinAllocation,"dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartClient();
         }

@@ -26,13 +26,40 @@ public class PlayerController : NetworkBehaviour
             SpawnClientRPC();
         }
 
-        Camera playerCam = GetComponentInChildren<Camera>();
+        /*Camera playerCam = GetComponentInChildren<Camera>();
+        AudioListener playerAudio = GetComponentInChildren<AudioListener>();
         Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        AudioListener debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
         if (playerCam != null)
         {
+            debutAudio.enabled = false;
             debutCam.enabled = false;
             playerCam.enabled = true;
+            playerAudio.enabled = true;
+        }*/
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsLocalPlayer || !IsOwner)
+            return;
+        Camera playerCam = GetComponentInChildren<Camera>();
+        AudioListener playerAudio = GetComponentInChildren<AudioListener>();
+        Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        AudioListener debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
+
+        if (playerCam != null)
+        {
+            debutAudio.enabled = false;
+            debutCam.enabled = false;
+            playerCam.enabled = false;
+            playerAudio.enabled = false;
+
+
+            playerCam.enabled = true;
+            playerAudio.enabled = true;
         }
+        base.OnNetworkSpawn();
     }
 
     public void OnCurrentSpawn(Vector3 previous, Vector3 current)
