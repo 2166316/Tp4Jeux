@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,7 +13,16 @@ public class PlayerController : NetworkBehaviour
     private Animator animator;
 
     private Vector3 spawnPoint = new Vector3(1.8f, 65f, -168f);
-    private NetworkVariable<Vector3> posNetwork = new();
+    private NetworkVariable<Vector3> posNetwork = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    [Rpc(SendTo.Server)]
+    public void KillPlayerRpc()
+    {
+        isDead.Value = true;
+        Debug.Log("Player died");
+    }
 
     void Start()
     {
@@ -25,24 +35,15 @@ public class PlayerController : NetworkBehaviour
         {
             SpawnClientRPC();
         }
-
-        /*Camera playerCam = GetComponentInChildren<Camera>();
-        AudioListener playerAudio = GetComponentInChildren<AudioListener>();
-        Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        AudioListener debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
-        if (playerCam != null)
-        {
-            debutAudio.enabled = false;
-            debutCam.enabled = false;
-            playerCam.enabled = true;
-            playerAudio.enabled = true;
-        }*/
     }
 
     public override void OnNetworkSpawn()
     {
+
         if (!IsLocalPlayer || !IsOwner)
             return;
+        
+
         Camera playerCam = GetComponentInChildren<Camera>();
         AudioListener playerAudio = GetComponentInChildren<AudioListener>();
         Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -54,7 +55,6 @@ public class PlayerController : NetworkBehaviour
             debutCam.enabled = false;
             playerCam.enabled = false;
             playerAudio.enabled = false;
-
 
             playerCam.enabled = true;
             playerAudio.enabled = true;
@@ -77,6 +77,10 @@ public class PlayerController : NetworkBehaviour
     void FixedUpdate()
     {
         if(!IsOwner)
+            return;
+
+        //si mort
+        if (isDead.Value)
             return;
 
         float moveX = Input.GetAxis("Horizontal");
