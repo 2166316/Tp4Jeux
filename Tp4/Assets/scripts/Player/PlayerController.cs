@@ -39,16 +39,13 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-
         if (!IsLocalPlayer || !IsOwner)
             return;
         
-
         Camera playerCam = GetComponentInChildren<Camera>();
         AudioListener playerAudio = GetComponentInChildren<AudioListener>();
         Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         AudioListener debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
-
         if (playerCam != null)
         {
             debutAudio.enabled = false;
@@ -59,6 +56,17 @@ public class PlayerController : NetworkBehaviour
             playerCam.enabled = true;
             playerAudio.enabled = true;
         }
+
+        GameObject loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
+        if (loginPanel != null)
+        {
+            loginPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("loginPanel est null");
+        }
+        
         base.OnNetworkSpawn();
     }
 

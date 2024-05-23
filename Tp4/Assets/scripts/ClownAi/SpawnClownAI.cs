@@ -79,8 +79,8 @@ public class SpawnClownAI : NetworkBehaviour
 
     private IEnumerator spawnClownAtRandomMoment()
     {
-        // int tempEnSecondes = Random.Range(15, 61);
-        int tempEnSecondes = Random.Range(5, 10);
+         int tempEnSecondes = Random.Range(15, 61);
+        //int tempEnSecondes = Random.Range(5, 10);
         Debug.Log(tempEnSecondes);
         yield return new WaitForSeconds(tempEnSecondes);
         InstantieClown();
