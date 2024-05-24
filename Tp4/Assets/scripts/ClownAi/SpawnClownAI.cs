@@ -27,7 +27,7 @@ public class SpawnClownAI : NetworkBehaviour
 
         listDePositionPredefiniePourClownIdle = new List<Vector3>
         {
-            new Vector3(2.1f, 67f,-140f),
+            new Vector3(Random.Range(1f,16f), 74f,-133.5f),
         };
         base.OnNetworkSpawn();
     }
@@ -48,7 +48,7 @@ public class SpawnClownAI : NetworkBehaviour
     {
         int position = Random.Range(0, listDePositionPredefiniePourClownIdle.Count);
 
-        clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClownIdle[position], new Quaternion(0f, 0f, 0f, 0f));
+        clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClownIdle[position], new Quaternion(0f, 180f, 0f, 0f));
 
         //met le clown � actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
@@ -106,7 +106,7 @@ public class SpawnClownAI : NetworkBehaviour
     {
         // int tempEnSecondes = Random.Range(15, 61);
         InstantieClownIdle();
-        int tempEnSecondes = Random.Range(10, 15);
+        int tempEnSecondes = Random.Range(2, 4);
 
         yield return new WaitForSeconds(tempEnSecondes);
 

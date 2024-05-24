@@ -16,7 +16,7 @@ public class ScaryClownController : NetworkBehaviour
     private int animatorMenacingHash;
 
 
-    [SerializeField] private int clownSpeed =5;
+    [SerializeField] private int clownSpeed = 10;
 
     private Vector3 destination;
 
@@ -54,7 +54,7 @@ public class ScaryClownController : NetworkBehaviour
     public void ChangeMenacingLookRpc()
     {
         lookingMenacing.Value = true;
-        animator.SetBool(animatorMenacingHash, true);
+       // animator.SetBool(animatorMenacingHash, true);
     }
 
      void FixedUpdate()
@@ -136,8 +136,6 @@ public class ScaryClownController : NetworkBehaviour
         destination = closestPlayerPosition;
         
     }
-
-    
 
     [Rpc(SendTo.Server)]
     public void DespawnRpc()
