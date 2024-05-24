@@ -12,6 +12,9 @@ public class ScaryClownController : NetworkBehaviour
     private Animator animator;
     private const string SPEED = "Speed";
     private int animatorVitesseHash;
+    private const string MENACING = "Menacing";
+    private int animatorMenacingHash;
+
 
     [SerializeField] private int clownSpeed =5;
 
@@ -21,8 +24,7 @@ public class ScaryClownController : NetworkBehaviour
 
     private List<NetworkObject> players = new();
 
-    private NetworkVariable<bool> clownIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+    private NetworkVariable<bool> lookingMenacing = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     
 
@@ -34,9 +36,11 @@ public class ScaryClownController : NetworkBehaviour
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.speed = clownSpeed;
 
-        //pour l'animateur
+        //pour l'animateur vitesse
         animator = GetComponent<Animator>();
         animatorVitesseHash = Animator.StringToHash(SPEED);
+        //menacing
+        animatorMenacingHash = Animator.StringToHash(MENACING);
 
         //trouve tous les players 
         GameObject.FindGameObjectsWithTag("Player").ToList().ForEach(poubelle => players.Add(poubelle.GetComponent<NetworkObject>()));
@@ -46,8 +50,20 @@ public class ScaryClownController : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
+    [Rpc(SendTo.Server)]
+    public void ChangeMenacingLookRpc()
+    {
+        lookingMenacing.Value = true;
+        animator.SetBool(animatorMenacingHash, true);
+    }
+
      void FixedUpdate()
     {
+        if(lookingMenacing.Value)
+            return;
+        
+
+        //action du clown quand actif
         //trouve continuellement le player le plus proche
         FindClosestPlayer();
 
@@ -121,11 +137,7 @@ public class ScaryClownController : NetworkBehaviour
         
     }
 
-    private IEnumerator LookMenacingWait(){
-        yield return new WaitForSeconds(5);
-        
-        Debug.Log(animator.speed);
-    }
+    
 
     [Rpc(SendTo.Server)]
     public void DespawnRpc()
