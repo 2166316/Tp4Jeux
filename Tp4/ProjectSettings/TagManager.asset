@@ -10,6 +10,8 @@ TagManager:
   - Key
   - ConnectionCodeInput
   - ClownStart
+  - LoginPanel
+  - Canvas
   layers:
   - Default
   - TransparentFX

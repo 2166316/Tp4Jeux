@@ -50,7 +50,7 @@ public class SpawnClownAI : NetworkBehaviour
 
         clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClownIdle[position], new Quaternion(0f, 0f, 0f, 0f));
 
-        //met le clown à actif
+        //met le clown ï¿½ actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
         //pour indiquer au spawner de pas en faire spawner d'autre
         ChangeClownActivityTrueRpc();
@@ -69,7 +69,7 @@ public class SpawnClownAI : NetworkBehaviour
 
         clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClown[position], new Quaternion(0f, 0f, 0f, 0f));
 
-        //met le clown à actif
+        //met le clown ï¿½ actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
         //controllerClown.ChangeClownActivityRpc();
         NetworkObject networkObject = clownAINetworkObjectRef.GetComponent<NetworkObject>();
@@ -107,6 +107,7 @@ public class SpawnClownAI : NetworkBehaviour
         // int tempEnSecondes = Random.Range(15, 61);
         InstantieClownIdle();
         int tempEnSecondes = Random.Range(10, 15);
+
         yield return new WaitForSeconds(tempEnSecondes);
 
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
