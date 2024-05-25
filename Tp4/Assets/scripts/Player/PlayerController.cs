@@ -82,37 +82,41 @@ public class PlayerController : NetworkBehaviour
         posNetwork.Value = spawnPoint;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if(!IsOwner)
-            return;
-
-        //si mort
-        if (isDead.Value)
+        if (!IsOwner || isDead.Value)
             return;
 
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
-        rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.deltaTime);
 
         float speed = movement.magnitude / moveSpeed;
+        Debug.Log(speed);
         animator.SetFloat("movespeed", speed);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Jump();
         }
+    }
+
+    void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     bool IsGrounded()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+        bool isgrounded = false;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
         {
-            return true;
+            isgrounded = true;
         }
-        return false;
+        return isgrounded;
     }
 }
