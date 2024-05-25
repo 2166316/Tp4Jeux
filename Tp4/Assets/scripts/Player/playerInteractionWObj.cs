@@ -43,7 +43,7 @@ public class playerInteractionWObj : NetworkBehaviour
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
             // Delete gameObject when pressing E + other actions
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
                 Destroy(hitObject);
             }
