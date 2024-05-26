@@ -1871,6 +1871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 26e9ae3cc5e653e44a82fb25d8e2a292, type: 2}
+  animator: {fileID: 2203322373762682915}
 --- !u!114 &8684223886508148360
 MonoBehaviour:
   m_ObjectHideFlags: 0

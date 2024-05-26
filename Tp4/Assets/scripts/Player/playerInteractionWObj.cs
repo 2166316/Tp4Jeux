@@ -8,6 +8,7 @@ public class playerInteractionWObj : NetworkBehaviour
     public Material highlightMaterial;
     private Material originalMaterial;
     private GameObject lastHighlightedObject;
+    public Animator animator;
     private float interactionDistance = 3.0f;
 
     void HighlightObject(GameObject gameObject)
@@ -43,8 +44,9 @@ public class playerInteractionWObj : NetworkBehaviour
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
             // Delete gameObject when pressing E + other actions
-            if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
+            if (Input.GetKeyDown(KeyCode.E))
             {
+                animator.SetBool("pickup", true);
                 Destroy(hitObject);
             }
         }

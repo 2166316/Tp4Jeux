@@ -21,6 +21,7 @@ public class PlayerController : NetworkBehaviour
     public void KillPlayerRpc()
     {
         isDead.Value = true;
+        die();
         Debug.Log("Player died");
     }
 
@@ -99,8 +100,15 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
+            animator.SetBool("isJump", true);
             Jump();
         }
+    }
+
+    void die()
+    {
+        animator.SetBool("isDead", true);
+
     }
 
     void Jump()
