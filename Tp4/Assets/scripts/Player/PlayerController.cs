@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody rb;
     private Animator animator;
 
-    private Vector3 spawnPoint = new Vector3(1.8f, 66f, -168f);
+    private Vector3 spawnPoint = new Vector3(35f, 66f, -77f);
     private NetworkVariable<Vector3> posNetwork = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -24,8 +24,11 @@ public class PlayerController : NetworkBehaviour
         Debug.Log("Player died");
     }
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsLocalPlayer || !IsOwner)
+            return;
+
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
@@ -35,13 +38,7 @@ public class PlayerController : NetworkBehaviour
         {
             SpawnClientRPC();
         }
-    }
 
-    public override void OnNetworkSpawn()
-    {
-        if (!IsLocalPlayer || !IsOwner)
-            return;
-        
         Camera playerCam = GetComponentInChildren<Camera>();
         AudioListener playerAudio = GetComponentInChildren<AudioListener>();
         Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
