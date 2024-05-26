@@ -15,15 +15,15 @@ public class ItemSpawner : NetworkBehaviour
         houseSpawnPointsEasy = new List<Vector3>
         {
             new Vector3(-17f,68f,-143f),
-            new Vector3(-20.3f,67.5f,-134f), 
+            //new Vector3(-20.3f,67.5f,-134f), 
             new Vector3(31.85f,68f,-117.5f),
         };
 
         houseSpawnPointsHard = new List<Vector3>
         {
-            new Vector3(29.5f,74.3f,-117.05f),
-            new Vector3(-15f,74f,-137.3f),
-            new Vector3(10.5f,73.25f,-152.6f),
+            new Vector3(40.9f,73.3f,-113.1f),
+            new Vector3(-19.8f,74f,-146.8f),
+            new Vector3(8.85f,73.25f,-152.6f),
         };
 
         outsideSpawnPoints = new List<Vector3>
