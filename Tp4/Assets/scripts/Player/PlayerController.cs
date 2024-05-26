@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody rb;
     private Animator animator;
 
-    private Vector3 spawnPoint = new Vector3(1.8f, 65f, -168f);
+    private Vector3 spawnPoint = new Vector3(1.8f, 66f, -168f);
     private NetworkVariable<Vector3> posNetwork = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);

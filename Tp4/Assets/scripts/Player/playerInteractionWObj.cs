@@ -10,6 +10,14 @@ public class playerInteractionWObj : NetworkBehaviour
     private GameObject lastHighlightedObject;
     private float interactionDistance = 3.0f;
 
+    private KeySpawnerController keyController;
+    public override void OnNetworkSpawn()
+    {
+
+        keyController = FindAnyObjectByType<KeySpawnerController>();
+        base.OnNetworkSpawn();
+    }
+
     void HighlightObject(GameObject gameObject)
     {
         if (lastHighlightedObject != gameObject && gameObject.CompareTag("Object"))
@@ -43,9 +51,15 @@ public class playerInteractionWObj : NetworkBehaviour
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
             // Delete gameObject when pressing E + other actions
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
-                Destroy(hitObject);
+
+                if (!IsOwner) return;
+
+                KeyBehavior cleNetWork = hitObject.GetComponent<KeyBehavior>();
+                cleNetWork.DespawnKeyRpc();
+                
+                keyController.PickUpKeyRpc();
             }
         }
         else

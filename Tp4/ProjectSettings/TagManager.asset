@@ -12,6 +12,7 @@ TagManager:
   - ClownStart
   - LoginPanel
   - Canvas
+  - ScoreUI
   layers:
   - Default
   - TransparentFX
