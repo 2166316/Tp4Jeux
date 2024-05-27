@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 5f; 
+    private float moveSpeed = 5f;
+    private float jumpForce = 50f; 
 
     private Rigidbody rb;
     private Animator animator;
@@ -95,13 +95,16 @@ public class PlayerController : NetworkBehaviour
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.deltaTime);
 
         float speed = movement.magnitude / moveSpeed;
-        Debug.Log(speed);
         animator.SetFloat("movespeed", speed);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             animator.SetBool("isJump", true);
             Jump();
+        }
+        if (!IsGrounded())
+        {
+            animator.SetBool("isJump", false);
         }
     }
 
@@ -113,7 +116,8 @@ public class PlayerController : NetworkBehaviour
 
     void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Debug.Log("HIT");
+        //rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
