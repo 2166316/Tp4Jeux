@@ -12,7 +12,8 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody rb;
     private Animator animator;
 
-    private Vector3 spawnPoint = new Vector3(35f, 66f, -77f);
+    //private Vector3 spawnPoint = new Vector3(35f, 66f, -77f);
+    private Vector3 spawnPoint = new Vector3(9.717109f, 68f, -163f);
     private NetworkVariable<Vector3> posNetwork = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -81,7 +82,7 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if(!IsOwner)
+        if(!IsOwner || !IsSpawned)
             return;
 
         //si mort
@@ -101,6 +102,24 @@ public class PlayerController : NetworkBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+
+        //corriger player par terre 
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+      
+        currentRotation.x = 0f;
+        currentRotation.z = 0f;
+      
+        transform.rotation = Quaternion.Euler(currentRotation);
+
+        MovePlayerServerRpc(transform.position, transform.rotation);
+        // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
+    }
+
+    [ServerRpc]
+    private void MovePlayerServerRpc(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
     }
 
     bool IsGrounded()
