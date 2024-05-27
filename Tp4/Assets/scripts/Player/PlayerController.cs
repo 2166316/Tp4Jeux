@@ -107,7 +107,7 @@ public class PlayerController : NetworkBehaviour
 
     void die()
     {
-        animator.SetBool("isDead", true);
+        //animator.SetBool("isDead", true);
 
     }
 

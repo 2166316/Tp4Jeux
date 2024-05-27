@@ -10,6 +10,9 @@ public class playerInteractionWObj : NetworkBehaviour
     private GameObject lastHighlightedObject;
     public Animator animator;
     private float interactionDistance = 3.0f;
+    private float pickuptimerLimit = 1.8f;
+    private float pickupTimer = 0f;
+    private bool itempickup = false;
 
     void HighlightObject(GameObject gameObject)
     {
@@ -34,18 +37,15 @@ public class playerInteractionWObj : NetworkBehaviour
     void HighlightObjectInCenterOfCam()
     {
         float rayDistance = interactionDistance;
-        // Ray from the center of the viewport.
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
-        // Check if we hit something.
         if (Physics.Raycast(ray, out rayHit, rayDistance))
         {
-            // Get the object that was hit.
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
-            // Delete gameObject when pressing E + other actions
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
+                itempickup = true;
                 animator.SetBool("pickup", true);
                 Destroy(hitObject);
             }
@@ -59,5 +59,15 @@ public class playerInteractionWObj : NetworkBehaviour
     void Update()
     {
         HighlightObjectInCenterOfCam();
+        if (itempickup)
+        {
+            pickupTimer += Time.deltaTime;
+            if (pickupTimer > pickuptimerLimit)
+            {
+                itempickup = false;
+                animator.SetBool("pickup", false);
+                pickupTimer = 0;
+            }
+        }
     }
 }
