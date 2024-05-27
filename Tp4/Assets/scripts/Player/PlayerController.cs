@@ -104,14 +104,14 @@ public class PlayerController : NetworkBehaviour
         }
 
         //corriger player par terre 
-        Vector3 currentRotation = transform.rotation.eulerAngles;
+       /* Vector3 currentRotation = transform.rotation.eulerAngles;
       
         currentRotation.x = 0f;
         currentRotation.z = 0f;
       
         transform.rotation = Quaternion.Euler(currentRotation);
 
-        MovePlayerServerRpc(transform.position, transform.rotation);
+        MovePlayerServerRpc(transform.position, transform.rotation);*/
         // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
     }
 
