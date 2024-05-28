@@ -22,7 +22,6 @@ public class PlayerController : NetworkBehaviour
     {
         isDead.Value = true;
         die();
-        Debug.Log("Player died");
     }
 
     void Start()
@@ -95,7 +94,7 @@ public class PlayerController : NetworkBehaviour
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.deltaTime);
 
         float speed = movement.magnitude / moveSpeed;
-        animator.SetFloat("movespeed", speed);
+        animator.SetFloat("Blend", speed/2);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -116,8 +115,7 @@ public class PlayerController : NetworkBehaviour
 
     void Jump()
     {
-        Debug.Log("HIT");
-        //rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
