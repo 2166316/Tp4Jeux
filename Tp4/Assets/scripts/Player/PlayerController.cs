@@ -106,7 +106,6 @@ public class PlayerController : NetworkBehaviour
             animator.SetBool("isJump", false);
         }
 
-        checkFloorMaterial();
     }
 
     void die()
@@ -130,13 +129,5 @@ public class PlayerController : NetworkBehaviour
             isgrounded = true;
         }
         return isgrounded;
-    }
-
-    void checkFloorMaterial()
-    {
-        if (IsGrounded())
-        {
-
-        }
     }
 }
