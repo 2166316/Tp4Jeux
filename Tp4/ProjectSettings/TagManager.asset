@@ -12,6 +12,8 @@ TagManager:
   - ClownStart
   - LoginPanel
   - Canvas
+  - Exterior
+  - Interior
   layers:
   - Default
   - TransparentFX

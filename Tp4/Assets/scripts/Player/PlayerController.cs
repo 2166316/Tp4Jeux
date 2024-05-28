@@ -105,11 +105,13 @@ public class PlayerController : NetworkBehaviour
         {
             animator.SetBool("isJump", false);
         }
+
+        checkFloorMaterial();
     }
 
     void die()
     {
-        //animator.SetBool("isDead", true);
+        animator.SetBool("isDead", true);
 
     }
 
@@ -128,5 +130,13 @@ public class PlayerController : NetworkBehaviour
             isgrounded = true;
         }
         return isgrounded;
+    }
+
+    void checkFloorMaterial()
+    {
+        if (IsGrounded())
+        {
+
+        }
     }
 }
