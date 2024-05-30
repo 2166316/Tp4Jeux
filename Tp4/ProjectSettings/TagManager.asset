@@ -13,6 +13,7 @@ TagManager:
   - LoginPanel
   - Canvas
   - ScoreUI
+  - Exterior
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,10 @@ public class playerInteractionWObj : NetworkBehaviour
     private Material originalMaterial;
     private GameObject lastHighlightedObject;
     private float interactionDistance = 3.0f;
+    public Animator animator;
+    private float pickupAnimationTime = 0;
+    private float animationTimer = 2.5f;
+    private bool animTime = false;
 
     private KeySpawnerController keyController;
     public override void OnNetworkSpawn()
@@ -53,7 +57,8 @@ public class playerInteractionWObj : NetworkBehaviour
             // Delete gameObject when pressing E + other actions
             if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
-
+                animator.SetBool("pickup", true);
+                animTime = true;
                 if (!IsOwner) return;
 
                 KeyBehavior cleNetWork = hitObject.GetComponent<KeyBehavior>();
@@ -71,5 +76,15 @@ public class playerInteractionWObj : NetworkBehaviour
     void Update()
     {
         HighlightObjectInCenterOfCam();
+        if(animTime)
+        {
+            pickupAnimationTime += Time.deltaTime;
+            if(pickupAnimationTime > animationTimer)
+            {
+                pickupAnimationTime = 0;
+                animTime = false;
+                animator.SetBool("pickup", true);
+            }
+        }
     }
 }

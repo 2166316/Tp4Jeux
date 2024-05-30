@@ -22,6 +22,7 @@ public class PlayerController : NetworkBehaviour
     public void KillPlayerRpc()
     {
         isDead.Value = true;
+        animator.SetBool("isDead", true);
         Debug.Log("Player died");
     }
 
@@ -95,8 +96,8 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
 
-        float speed = movement.magnitude / moveSpeed;
-        animator.SetFloat("movespeed", speed);
+        float speed = (movement.magnitude / moveSpeed) / 2;
+        animator.SetFloat("Blend", speed);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
