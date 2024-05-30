@@ -84,7 +84,7 @@ public class MonsterController : NetworkBehaviour
 
         audioSource.clip = bitingAudioClip; // Switch to biting audio clip
         audioSource.pitch = 1f; // Reset pitch for biting audio
-        audioSource.volume = 1f; // Set appropriate volume for biting audio
+        audioSource.volume = 0.3f; // Set appropriate volume for biting audio
         audioSource.Play();
 
         float animationLength = animationClip.length;
@@ -136,21 +136,10 @@ public class MonsterController : NetworkBehaviour
 
     private void UpdateAudioProperties()
     {
-        if (biting)
-        {
-            // If biting, ensure biting audio clip is playing
-            if (audioSource.clip != bitingAudioClip)
-            {
-                audioSource.clip = bitingAudioClip;
-                audioSource.pitch = 1f; // Reset pitch for biting audio
-                audioSource.volume = 1f; // Set appropriate volume for biting audio
-                audioSource.Play();
-            }
-        }
-        else if (currentSpeed > 0.3f)
+        if (currentSpeed > 0.3f)
         {
             float pitch = Mathf.Lerp(0.3f, 1f, currentSpeed);
-            float volume = Mathf.Lerp(0.1f, 1f, currentSpeed); // Adjust volume based on speed
+            float volume = Mathf.Lerp(0.1f, 0.3f, currentSpeed); // Adjust volume based on speed
             audioSource.pitch = pitch;
             audioSource.volume = volume;
 
