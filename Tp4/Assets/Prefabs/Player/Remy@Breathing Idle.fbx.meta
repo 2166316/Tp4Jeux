@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ac8c83ef94db8dc459f47d291588f44f
+guid: 833720feaeac5bd4fa3680a718dd96c6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,7 +31,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Breathing Idle
+      takeName: mixamo.com
+      internalID: -203655887218126122
+      firstFrame: 0
+      lastFrame: 298
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -77,13 +106,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - 833720feaeac5bd4fa3680a718dd96c6
-  - 4b0bab8d88024d247bc47fabe6987bd4
-  - 7b75ec5fe49d28d4a9e142497d4f6610
-  - ce9f7f429e72ff340b6133aebaa7a0d9
-  - 8cc00f5b5f5dfeb47be3d60d8ba32c43
-  - b7b0956be64b28540b3f52a15e82df90
+  referencedClips: []
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
