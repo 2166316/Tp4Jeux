@@ -23,6 +23,7 @@ public class PlayerController : NetworkBehaviour
     {
         isDead.Value = true;
         animator.SetBool("isDead", true);
+        gameObject.tag = "Untagged";
         Debug.Log("Player died");
     }
 
