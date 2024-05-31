@@ -894,7 +894,7 @@ GameObject:
   - component: {fileID: 3327530636945669822}
   m_Layer: 0
   m_Name: playerCam
-  m_TagString: MainCamera
+  m_TagString: PlayerCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1851,7 +1851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4187080557
+  GlobalObjectIdHash: 3416881560
   InScenePlacedSourceGlobalObjectIdHash: 4187080557
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1886,6 +1886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2fb9c2a93f1174794b6de1486316d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpForce: 5
 --- !u!95 &2203322373762682915
 Animator:
   serializedVersion: 5

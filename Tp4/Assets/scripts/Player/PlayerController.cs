@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -18,6 +15,12 @@ public class PlayerController : NetworkBehaviour
 
     private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    private Camera playerCam;
+    private AudioListener playerAudio;
+    private Camera debutCam;
+    private AudioListener debutAudio;
+    private GameObject loginPanel;
+
     [Rpc(SendTo.Server)]
     public void KillPlayerRpc()
     {
@@ -27,6 +30,57 @@ public class PlayerController : NetworkBehaviour
         Debug.Log("Player died");
     }
 
+    //vue login
+    public void GoToConnection()
+    {
+        if (playerCam != null)
+        {
+            //reset all juste pour être sûr
+            debutAudio.enabled = false;
+            debutCam.enabled = false;
+            playerCam.enabled = false;
+            playerAudio.enabled = false;
+
+            debutCam.enabled = true;
+            debutAudio.enabled = true;
+        }
+
+        //enable le login panel
+        if (loginPanel != null)
+        {
+            loginPanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("loginPanel est null");
+        }
+    }
+
+    //vue game
+    public void GoToGame()
+    {
+        if (playerCam != null)
+        {
+            //reset all juste pour être sûr
+            debutAudio.enabled = false;
+            debutCam.enabled = false;
+            playerCam.enabled = false;
+            playerAudio.enabled = false;
+
+            playerCam.enabled = true;
+            playerAudio.enabled = true;
+        }
+
+        //disable le login panel
+        if (loginPanel != null)
+        {
+            loginPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("loginPanel est null");
+        }
+    }
     public override void OnNetworkSpawn()
     {
         if (!IsLocalPlayer || !IsOwner)
@@ -42,32 +96,23 @@ public class PlayerController : NetworkBehaviour
             SpawnClientRPC();
         }
 
-        Camera playerCam = GetComponentInChildren<Camera>();
-        AudioListener playerAudio = GetComponentInChildren<AudioListener>();
-        Camera debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        AudioListener debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
-        if (playerCam != null)
-        {
-            debutAudio.enabled = false;
-            debutCam.enabled = false;
-            playerCam.enabled = false;
-            playerAudio.enabled = false;
+        //init des gameobjs 
+        loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
+        playerCam = GetComponentInChildren<Camera>();
+        playerAudio = GetComponentInChildren<AudioListener>();
+        debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
 
-            playerCam.enabled = true;
-            playerAudio.enabled = true;
-        }
-
-        GameObject loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
-        if (loginPanel != null)
-        {
-            loginPanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("loginPanel est null");
-        }
-        
+        //vue jeux
+        GoToGame();
         base.OnNetworkSpawn();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        //vue connection
+        GoToConnection();
+        base.OnNetworkDespawn();
     }
 
     public void OnCurrentSpawn(Vector3 previous, Vector3 current)
@@ -76,6 +121,7 @@ public class PlayerController : NetworkBehaviour
         transform.position = current;
     }
 
+    //change la position du player au spawn network
     [Rpc(SendTo.Server)]
     void SpawnClientRPC()
     {
@@ -115,13 +161,6 @@ public class PlayerController : NetworkBehaviour
 
         MovePlayerServerRpc(transform.position, transform.rotation);*/
         // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
-    }
-
-    [ServerRpc]
-    private void MovePlayerServerRpc(Vector3 position, Quaternion rotation)
-    {
-        transform.position = position;
-        transform.rotation = rotation;
     }
 
     bool IsGrounded()

@@ -15,9 +15,11 @@ public class playerInteractionWObj : NetworkBehaviour
     private bool animTime = false;
 
     private KeySpawnerController keyController;
+
+    private Camera playerCamera;
     public override void OnNetworkSpawn()
     {
-
+        playerCamera = GetComponentInChildren<Camera>();
         keyController = FindAnyObjectByType<KeySpawnerController>();
         base.OnNetworkSpawn();
     }
@@ -46,7 +48,10 @@ public class playerInteractionWObj : NetworkBehaviour
     {
         float rayDistance = interactionDistance;
         // Ray from the center of the viewport.
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        if (playerCamera != null){
+
+        }
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
         // Check if we hit something.
         if (Physics.Raycast(ray, out rayHit, rayDistance))

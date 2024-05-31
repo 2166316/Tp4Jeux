@@ -20,6 +20,7 @@ public class FlashLightController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
         rotationY += mouseY;
         rotationY = Mathf.Clamp(rotationY, -90f, 90f);
