@@ -30,6 +30,8 @@ public class Relay : NetworkBehaviour
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
+        QualitySettings.vSyncCount = 0;
+
         loginButton.onClick.AddListener(() =>
         {
             Debug.Log(textVal.text);
