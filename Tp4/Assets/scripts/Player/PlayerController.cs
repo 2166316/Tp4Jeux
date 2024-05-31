@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class PlayerController : NetworkBehaviour
     private Camera debutCam;
     private AudioListener debutAudio;
     private GameObject loginPanel;
-
+    private bool isGrounded;
     [Rpc(SendTo.Server)]
     public void KillPlayerRpc()
     {
@@ -35,7 +36,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerCam != null)
         {
-            //reset all juste pour être sûr
+            //reset all juste pour ï¿½tre sï¿½r
             debutAudio.enabled = false;
             debutCam.enabled = false;
             playerCam.enabled = false;
@@ -61,7 +62,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerCam != null)
         {
-            //reset all juste pour être sûr
+            //reset all juste pour ï¿½tre sï¿½r
             debutAudio.enabled = false;
             debutCam.enabled = false;
             playerCam.enabled = false;
@@ -95,7 +96,7 @@ public class PlayerController : NetworkBehaviour
         {
             SpawnClientRPC();
         }
-
+        isGrounded = true;
         //init des gameobjs 
         loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
         playerCam = GetComponentInChildren<Camera>();
@@ -128,6 +129,8 @@ public class PlayerController : NetworkBehaviour
         posNetwork.Value = spawnPoint;
     }
 
+
+
     void FixedUpdate()
     {
         if(!IsOwner || !IsSpawned)
@@ -139,18 +142,19 @@ public class PlayerController : NetworkBehaviour
 
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
-
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveX = moveX * 2;
+            moveZ = moveZ * 2;
+            animator.SetFloat("Blend", 1);
+        }
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
-
         float speed = (movement.magnitude / moveSpeed) / 2;
         animator.SetFloat("Blend", speed);
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-
+        
         //corriger player par terre 
        /* Vector3 currentRotation = transform.rotation.eulerAngles;
       
@@ -163,13 +167,21 @@ public class PlayerController : NetworkBehaviour
         // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
     }
 
-    bool IsGrounded()
+
+    private void Update()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            return true;
+            Debug.Log("jump");
+            StartCoroutine(TimeBeforeNextJump());
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
-        return false;
+    }
+
+    private IEnumerator TimeBeforeNextJump()
+    {
+        yield return new WaitForSeconds(1);
+        isGrounded = true;
     }
 }
