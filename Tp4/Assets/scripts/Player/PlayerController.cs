@@ -139,16 +139,22 @@ public class PlayerController : NetworkBehaviour
 
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
-
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveX = moveX * 2;
+            moveZ = moveZ * 2;
+            animator.SetFloat("Blend", 1);
+        }
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
-
         float speed = (movement.magnitude / moveSpeed) / 2;
         animator.SetFloat("Blend", speed);
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Debug.Log("IS SUPOSED TO JUMP");
+            jumpServerRpc();
         }
 
         //corriger player par terre 
@@ -163,8 +169,15 @@ public class PlayerController : NetworkBehaviour
         // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
     }
 
+    [ServerRpc]
+    private void jumpServerRpc()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
     bool IsGrounded()
     {
+        Debug.Log("HIT");
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
