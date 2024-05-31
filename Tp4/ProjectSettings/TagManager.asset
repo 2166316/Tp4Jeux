@@ -16,6 +16,7 @@ TagManager:
   - Exterior
   - InGameMenu
   - PlayerCamera
+  - Floor
   layers:
   - Default
   - TransparentFX
