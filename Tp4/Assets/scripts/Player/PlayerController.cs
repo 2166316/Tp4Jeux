@@ -36,7 +36,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerCam != null)
         {
-            //reset all juste pour être sûr
+            //reset all juste pour ï¿½tre sï¿½r
             debutAudio.enabled = false;
             debutCam.enabled = false;
             playerCam.enabled = false;
@@ -62,7 +62,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (playerCam != null)
         {
-            //reset all juste pour être sûr
+            //reset all juste pour ï¿½tre sï¿½r
             debutAudio.enabled = false;
             debutCam.enabled = false;
             playerCam.enabled = false;
@@ -142,15 +142,19 @@ public class PlayerController : NetworkBehaviour
 
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
-
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveX = moveX * 2;
+            moveZ = moveZ * 2;
+            animator.SetFloat("Blend", 1);
+        }
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * moveSpeed;
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
-
         float speed = (movement.magnitude / moveSpeed) / 2;
         animator.SetFloat("Blend", speed);
 
-
-
+        
         //corriger player par terre 
        /* Vector3 currentRotation = transform.rotation.eulerAngles;
       
@@ -162,6 +166,7 @@ public class PlayerController : NetworkBehaviour
         MovePlayerServerRpc(transform.position, transform.rotation);*/
         // Debug.Log(transform.rotation.z +"  "+ transform.rotation.x);
     }
+
 
     private void Update()
     {
