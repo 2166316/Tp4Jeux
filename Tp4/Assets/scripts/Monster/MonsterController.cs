@@ -15,21 +15,21 @@ public class MonsterController : NetworkBehaviour
     private float minSpeed = 2f;
     private float maxSpeed = 5f;
     private float currentSpeed = 0f;
-    private float speedIncrement = 0.2f;
+    private float speedIncrement = 0.15f;
 
     public NavMeshAgent agent;
-    private float wanderTimer = 15f;
     private float timer;
     private NavMeshTriangulation navMeshData;
 
     public bool aggroed = false;
     private bool biting = false;
+    private bool isWaiting = false;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        timer = wanderTimer;
+        timer = 0f;
         navMeshData = NavMesh.CalculateTriangulation();
 
         agent.speed = minSpeed;
@@ -51,16 +51,26 @@ public class MonsterController : NetworkBehaviour
             DecreaseSpeed();
         }
 
-        timer += Time.deltaTime;
+        animator.SetFloat("speed", currentSpeed);
 
-        if (timer >= wanderTimer && !biting)
+        // Check if the agent has reached its destination
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && !isWaiting)
         {
-            Vector3 newPos = GetRandomPointOnNavMesh();
-            agent.SetDestination(newPos);
-            timer = 0;
+            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            {
+                StartCoroutine(WaitAndWander());
+            }
         }
 
-        animator.SetFloat("speed", currentSpeed);
+        // Check if the agent is stopped
+        if (agent.velocity.sqrMagnitude < 0.01f)
+        {
+            animator.SetBool("isStopped", true);
+        }
+        else
+        {
+            animator.SetBool("isStopped", false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -90,11 +100,20 @@ public class MonsterController : NetworkBehaviour
         float animationLength = animationClip.length;
         yield return new WaitForSeconds(animationLength * 3);
 
-        timer = wanderTimer + 1f;
+        timer = 1f;
         animator.SetBool("biting", false);
         biting = false;
         agent.isStopped = false; // Resume the NavMeshAgent
         audioSource.clip = normalAudioClip;
+    }
+
+    private IEnumerator WaitAndWander()
+    {
+        isWaiting = true;
+        yield return new WaitForSeconds(2f); // Wait for 2 seconds
+        Vector3 newPos = GetRandomPointOnNavMesh();
+        agent.SetDestination(newPos);
+        isWaiting = false;
     }
 
     private Vector3 GetRandomPointOnNavMesh()

@@ -17,7 +17,6 @@ public class MonsterAggro : MonoBehaviour
     void Start()
     {
         instance = this;
-
         timer = reaggroTimer;
     }
 
@@ -34,8 +33,19 @@ public class MonsterAggro : MonoBehaviour
         // If the monster is following the player, update the destination to the player's position
         if (isFollowingPlayer && playerTransform != null)
         {
-            monsterAgent.SetDestination(playerTransform.position);
-            MonsterController.instance.aggroed = true;
+            // Find the closest point on the NavMesh to the player
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(playerTransform.position, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                // Set the destination to the closest point on the NavMesh
+                monsterAgent.SetDestination(hit.position);
+                MonsterController.instance.aggroed = true;
+            }
+            else
+            {
+                // If no valid position is found, reset the monster
+                resetMonster();
+            }
         }
     }
 
@@ -66,6 +76,7 @@ public class MonsterAggro : MonoBehaviour
             }
         }
     }
+
     private IEnumerator DelayedReset()
     {
         yield return new WaitForSeconds(2f); // Wait for 2 seconds
