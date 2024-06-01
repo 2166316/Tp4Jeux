@@ -53,9 +53,7 @@ public class Relay : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void ChangeCodeRpc(string connexionCode) {
         codeConnexion.Value = connexionCode;
-        GameObject codeText = GameObject.FindWithTag("RelayCode");
-        TextMeshProUGUI textComponent = codeText.GetComponent<TextMeshProUGUI>();
-        textComponent.text = "Code : " + connexionCode;
+        
     }
 
     //création du relay et du host
@@ -69,6 +67,13 @@ public class Relay : NetworkBehaviour
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             ChangeCodeRpc(joinCode);
             Debug.Log("Code pour rejoindre: "+joinCode);
+
+            GameObject codeText = GameObject.FindWithTag("RelayCode");
+            if (codeText != null)
+            {
+                TextMeshProUGUI textComponent = codeText.GetComponent<TextMeshProUGUI>();
+                textComponent.text = "Code : " + joinCode;
+            }
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
