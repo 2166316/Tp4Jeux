@@ -23,12 +23,21 @@ public class Relay : NetworkBehaviour
     {
         await UnityServices.InitializeAsync();
 
-        //callback
-        AuthenticationService.Instance.SignedIn += () =>
+        // Check if the player is already signed in
+        if (!AuthenticationService.Instance.IsSignedIn)
         {
-            Debug.Log("Player avec le id:" + AuthenticationService.Instance.PlayerId);
-        };
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            // Callback
+            AuthenticationService.Instance.SignedIn += () =>
+            {
+                Debug.Log("Player with ID: " + AuthenticationService.Instance.PlayerId);
+            };
+
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        else
+        {
+            Debug.Log("Player already signed in with ID: " + AuthenticationService.Instance.PlayerId);
+        }
 
         QualitySettings.vSyncCount = 0;
 
@@ -36,7 +45,6 @@ public class Relay : NetworkBehaviour
         {
             Debug.Log(textVal.text);
             JoinRelay(textVal.text);
-            
         });
 
         hostButton.onClick.AddListener(() =>
@@ -44,6 +52,7 @@ public class Relay : NetworkBehaviour
             CreateRelay();
         });
     }
+
 
     private void Update()
     {
