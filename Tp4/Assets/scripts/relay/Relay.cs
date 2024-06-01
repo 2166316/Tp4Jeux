@@ -8,7 +8,7 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Collections;
 using UnityEngine.UI;
 using Unity.Networking.Transport.Relay;
-
+using TMPro;
 
 public class Relay : NetworkBehaviour
 {
@@ -53,8 +53,10 @@ public class Relay : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void ChangeCodeRpc(string connexionCode) {
         codeConnexion.Value = connexionCode;
+        GameObject codeText = GameObject.FindWithTag("RelayCode");
+        TextMeshProUGUI textComponent = codeText.GetComponent<TextMeshProUGUI>();
+        textComponent.text = "Code : " + connexionCode;
     }
-
 
     //création du relay et du host
     public async void CreateRelay()

@@ -17,6 +17,7 @@ TagManager:
   - InGameMenu
   - PlayerCamera
   - Floor
+  - RelayCode
   layers:
   - Default
   - TransparentFX
