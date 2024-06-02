@@ -59,6 +59,12 @@ public class Relay : NetworkBehaviour
         
     }
 
+    public string getCodeConnexion()
+    {
+        string code = codeConnexion.Value.ToString();
+        return code;
+    }
+
     [Rpc(SendTo.Server)]
     public void ChangeCodeRpc(string connexionCode) {
         codeConnexion.Value = connexionCode;
@@ -80,8 +86,11 @@ public class Relay : NetworkBehaviour
             GameObject codeText = GameObject.FindWithTag("RelayCode");
             if (codeText != null)
             {
+                Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
                 TextMeshProUGUI textComponent = codeText.GetComponent<TextMeshProUGUI>();
                 textComponent.text = "Code : " + joinCode;
+            } else {
+                Debug.Log("CODE UI ELEMENT NOT FOUND ");
             }
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");

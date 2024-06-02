@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,8 +12,10 @@ public class InGameMenuScript : NetworkBehaviour
 
     private GameObject panel;
     [SerializeField]private Button disconnectButton;
+    private Relay relay;
     private void Start()
     {
+        
         //menu
         panel = GameObject.FindGameObjectWithTag("InGameMenu");
 
@@ -41,6 +44,12 @@ public class InGameMenuScript : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             ToggleMenu();
+            /* try get codeConnexion
+            relay = GetComponent<Relay>();
+            string code = relay.getCodeConnexion();
+            Debug.Log("Code Connexion: " + code);
+            */
+
         }
     }
 
