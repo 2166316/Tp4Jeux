@@ -38,18 +38,32 @@ public class InGameMenuScript : NetworkBehaviour
         }
     }
 
-     void Update()
+    public override void OnNetworkSpawn()
+    {
+        relay = FindAnyObjectByType<Relay>();
+
+
+        base.OnNetworkSpawn();
+    }
+
+    void Update()
     {
         //active le menu
         if (Input.GetKeyDown(KeyCode.M))
         {
             ToggleMenu();
-            /* try get codeConnexion
-            relay = GetComponent<Relay>();
-            string code = relay.getCodeConnexion();
-            Debug.Log("Code Connexion: " + code);
-            */
-
+            //get relay code
+            if (!Equals(relay, null))
+            {
+                string code = relay.getCodeConnexion();
+                if (code != null)
+                {
+                    Debug.Log("THE CODE IS :: " + code);
+                } else
+                {
+                    Debug.Log("ERROR: NOT ABLE TO FETCH CONNEXION CODE");
+                }
+            }
         }
     }
 
