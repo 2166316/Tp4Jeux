@@ -8,7 +8,7 @@ public class playerInteractionWObj : NetworkBehaviour
     public Material highlightMaterial;
     private Material originalMaterial;
     private GameObject lastHighlightedObject;
-    private float interactionDistance = 3.0f;
+    private float interactionDistance = 4.0f;
     public Animator animator;
     private float pickupAnimationTime = 0;
     private float animationTimer = 2.5f;
@@ -62,10 +62,12 @@ public class playerInteractionWObj : NetworkBehaviour
             // Delete gameObject when pressing E + other actions
             if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
-                animator.SetBool("pickup", true);
-                animTime = true;
-                if (!IsOwner) return;
+  
 
+                animator.SetBool("pickup", true);
+                StartCoroutine(waitOne());
+
+                if (!IsOwner) return;
                 KeyBehavior cleNetWork = hitObject.GetComponent<KeyBehavior>();
                 cleNetWork.DespawnKeyRpc();
                 
@@ -78,18 +80,15 @@ public class playerInteractionWObj : NetworkBehaviour
         }
     }
 
+    private IEnumerator waitOne()
+    {
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("pickup", false);
+    }
+
     void Update()
     {
         HighlightObjectInCenterOfCam();
-        if(animTime)
-        {
-            pickupAnimationTime += Time.deltaTime;
-            if(pickupAnimationTime > animationTimer)
-            {
-                pickupAnimationTime = 0;
-                animTime = false;
-                animator.SetBool("pickup", true);
-            }
-        }
+        
     }
 }

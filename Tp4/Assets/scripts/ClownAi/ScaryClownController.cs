@@ -15,7 +15,6 @@ public class ScaryClownController : NetworkBehaviour
     private const string MENACING = "Menacing";
     private int animatorMenacingHash;
 
-
     [SerializeField] private int clownSpeed = 10;
 
     private Vector3 destination;
@@ -25,8 +24,6 @@ public class ScaryClownController : NetworkBehaviour
     private List<NetworkObject> players = new();
 
     private NetworkVariable<bool> lookingMenacing = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-    
 
     public override void OnNetworkSpawn()
     {
