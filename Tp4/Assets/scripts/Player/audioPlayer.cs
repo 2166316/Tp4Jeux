@@ -6,30 +6,30 @@ using UnityEngine;
 
 public enum ClipPlaying
 {
-    idle,walking,running
+    idle, walking, running
 }
 public class AudioPlayer : NetworkBehaviour
 {
-   
+
     public AudioSource source;
     public AudioClip playerFootStepsWalking;
     public AudioClip playerFootStepsRunning;
-    public  ClipPlaying currentClipPlaying;
+    public ClipPlaying currentClipPlaying;
 
     void Start()
     {
         currentClipPlaying = ClipPlaying.idle;
         source = GetComponent<AudioSource>();
-       
+
     }
 
     public void playWalkingStepsAudio()
     {
-         source.clip = playerFootStepsWalking;
+        source.clip = playerFootStepsWalking;
         currentClipPlaying = ClipPlaying.walking;
         source.Stop();
         source.Play();
-         Debug.Log("walk audio");
+        //Debug.Log("walk audio");
     }
 
     public void playRunningStepsAudio()
@@ -38,12 +38,12 @@ public class AudioPlayer : NetworkBehaviour
         currentClipPlaying = ClipPlaying.running;
         source.Stop();
         source.Play();
-        Debug.Log("walk audio");
+        // Debug.Log("walk audio");
     }
     public void stopStepsAudio()
     {
         source.Stop();
         currentClipPlaying = ClipPlaying.idle;
-        Debug.Log("stop audio");
+        //Debug.Log("stop audio");
     }
 }

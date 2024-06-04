@@ -7,6 +7,7 @@ public class Playercam : NetworkBehaviour
 {
     private float sensitivity = 100f;
     public GameObject player;
+    public PlayerController playerController;
 
     private float rotationY = 0f;
     private float rotationX = 0f;
@@ -15,6 +16,7 @@ public class Playercam : NetworkBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        playerController = player.GetComponent<PlayerController>();
     }
 
     void Update()
@@ -27,6 +29,9 @@ public class Playercam : NetworkBehaviour
         rotationX += mouseX;
         rotationY = Mathf.Clamp(rotationY, -90f, 90f);
         transform.localRotation = Quaternion.Euler(-rotationY, 0f, 0f);
+
+        if (playerController.getIsDeadVal())
+            return;
         player.transform.localRotation = Quaternion.Euler(0f, rotationX, 0f);
     }
 }

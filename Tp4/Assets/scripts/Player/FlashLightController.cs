@@ -9,12 +9,14 @@ public class FlashLightController : NetworkBehaviour
     private float sensitivity = 100f;
     private float rotationY = 0f;
     private Light lightSpot;
+    public PlayerController playerController;
 
     // Start is called before the first frame update
     void Start()
     {
         lightSpot = GetComponentInChildren<Light>();
         lightSpot.enabled = true;
+
     }
 
     // Update is called once per frame
@@ -26,8 +28,10 @@ public class FlashLightController : NetworkBehaviour
         rotationY = Mathf.Clamp(rotationY, -90f, 90f);
         transform.localRotation = Quaternion.Euler(-rotationY, 0f, 0f);
 
-        if (Input.GetKeyDown(KeyCode.F)) {
 
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
             lightSpot.enabled = !lightSpot.enabled;
         }
     }

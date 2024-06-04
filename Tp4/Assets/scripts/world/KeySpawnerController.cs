@@ -149,13 +149,13 @@ public class KeySpawnerController : NetworkBehaviour
                 break;
         }
 
-        //test positions  TO_REMOVE
-        positions.Add(new Vector3(7.7f,63.7f,-167.8f));
+        //test positions  TO_comment
+       /* positions.Add(new Vector3(7.7f,63.7f,-167.8f));
         positions.Add(new Vector3(8.3f, 63.7f, -167.8f));
         positions.Add(new Vector3(7.4f, 63.7f, -167.8f));
         positions.Add(new Vector3(8.6f, 63.7f, -167.8f));
         positions.Add(new Vector3(7.0f, 63.7f, -167.8f));
-        positions.Add(new Vector3(8.9f, 63.7f, -167.8f));
+        positions.Add(new Vector3(8.9f, 63.7f, -167.8f));*/
 
         SpawnItems(positions);
     }

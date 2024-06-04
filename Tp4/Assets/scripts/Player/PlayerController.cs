@@ -36,6 +36,11 @@ public class PlayerController : NetworkBehaviour
         audioPlayer.stopStepsAudio();
     }
 
+    public bool getIsDeadVal()
+    {
+        return isDead.Value;
+    }
+
     //vue login
     public void GoToConnection()
     {
@@ -88,10 +93,10 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-     void Start()
+    void Start()
     {
         audioPlayer = GetComponent<AudioPlayer>();
-       // audioPlayer.playWalkingStepsAudio();
+        // audioPlayer.playWalkingStepsAudio();
     }
 
     public override void OnNetworkSpawn()
@@ -124,6 +129,11 @@ public class PlayerController : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         //vue connection
+
+        if (NetworkManager.Singleton.IsHost )
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
         GoToConnection();
         base.OnNetworkDespawn();
     }
@@ -141,11 +151,9 @@ public class PlayerController : NetworkBehaviour
         posNetwork.Value = spawnPoint;
     }
 
-
-
     void FixedUpdate()
     {
-        if(!IsOwner || !IsSpawned)
+        if (!IsOwner || !IsSpawned)
             return;
 
         //si mort
@@ -156,19 +164,20 @@ public class PlayerController : NetworkBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
 
-        Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * (moveSpeed*multiplier);
+        Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * (moveSpeed * multiplier);
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
-        float speed = (movement.magnitude) ;
+        float speed = (movement.magnitude);
         animator.SetFloat("Blend", speed);
 
         //Debug.Log(animator.GetFloat("Blend"));
-        if(speed >= 6f)
+        if (speed >= 6f)
         {
-            if(!(audioPlayer.currentClipPlaying == ClipPlaying.running))
+            if (!(audioPlayer.currentClipPlaying == ClipPlaying.running))
             {
                 audioPlayer.playRunningStepsAudio();
             }
-        }else if(speed >= 1)
+        }
+        else if (speed >= 1)
         {
             if (!(audioPlayer.currentClipPlaying == ClipPlaying.walking))
             {
@@ -203,7 +212,7 @@ public class PlayerController : NetworkBehaviour
         //run
         if (Input.GetKey(KeyCode.LeftShift))
         {
-           // Debug.Log("test");
+            // Debug.Log("test");
             multiplier = 1.5f;
         }
         else

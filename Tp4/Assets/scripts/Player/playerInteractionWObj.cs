@@ -48,7 +48,8 @@ public class playerInteractionWObj : NetworkBehaviour
     {
         float rayDistance = interactionDistance;
         // Ray from the center of the viewport.
-        if (playerCamera != null){
+        if (playerCamera != null)
+        {
 
         }
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -62,7 +63,7 @@ public class playerInteractionWObj : NetworkBehaviour
             // Delete gameObject when pressing E + other actions
             if (Input.GetKeyDown(KeyCode.E) && hitObject.CompareTag("Object"))
             {
-  
+
 
                 animator.SetBool("pickup", true);
                 StartCoroutine(waitOne());
@@ -70,7 +71,7 @@ public class playerInteractionWObj : NetworkBehaviour
                 if (!IsOwner) return;
                 KeyBehavior cleNetWork = hitObject.GetComponent<KeyBehavior>();
                 cleNetWork.DespawnKeyRpc();
-                
+
                 keyController.PickUpKeyRpc();
             }
         }
@@ -89,6 +90,6 @@ public class playerInteractionWObj : NetworkBehaviour
     void Update()
     {
         HighlightObjectInCenterOfCam();
-        
+
     }
 }
