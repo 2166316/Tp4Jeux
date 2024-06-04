@@ -22,6 +22,10 @@ public class PlayerController : NetworkBehaviour
     private AudioListener debutAudio;
     private GameObject loginPanel;
     private bool isGrounded;
+
+    private AudioPlayer audioPlayer;
+
+
     [Rpc(SendTo.Server)]
     public void KillPlayerRpc()
     {
@@ -29,6 +33,7 @@ public class PlayerController : NetworkBehaviour
         animator.SetBool("isDead", true);
         gameObject.tag = "Untagged";
         Debug.Log("Player died");
+        audioPlayer.stopStepsAudio();
     }
 
     //vue login
@@ -82,6 +87,13 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("loginPanel est null");
         }
     }
+
+     void Start()
+    {
+        audioPlayer = GetComponent<AudioPlayer>();
+       // audioPlayer.playWalkingStepsAudio();
+    }
+
     public override void OnNetworkSpawn()
     {
         if (!IsLocalPlayer || !IsOwner)
@@ -150,6 +162,26 @@ public class PlayerController : NetworkBehaviour
         animator.SetFloat("Blend", speed);
 
         //Debug.Log(animator.GetFloat("Blend"));
+        if(speed >= 6f)
+        {
+            if(!(audioPlayer.currentClipPlaying == ClipPlaying.running))
+            {
+                audioPlayer.playRunningStepsAudio();
+            }
+        }else if(speed >= 1)
+        {
+            if (!(audioPlayer.currentClipPlaying == ClipPlaying.walking))
+            {
+                audioPlayer.playWalkingStepsAudio();
+            }
+        }
+        else
+        {
+            if (!(audioPlayer.currentClipPlaying == ClipPlaying.idle))
+            {
+                audioPlayer.stopStepsAudio();
+            }
+        }
     }
 
 

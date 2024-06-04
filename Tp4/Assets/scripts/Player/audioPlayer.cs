@@ -1,47 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class audioPlayer : MonoBehaviour
+
+public enum ClipPlaying
 {
-    public AudioSource ASource;
-    public AudioClip AOutdoors;
-    public AudioClip AInside;
-    private Rigidbody rb;
+    idle,walking,running
+}
+public class AudioPlayer : NetworkBehaviour
+{
+   
+    public AudioSource source;
+    public AudioClip playerFootStepsWalking;
+    public AudioClip playerFootStepsRunning;
+    public  ClipPlaying currentClipPlaying;
 
-    private string outside = "outside";
-    private string inside = "inside";
-
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        currentClipPlaying = ClipPlaying.idle;
+        source = GetComponent<AudioSource>();
+       
     }
 
-    // Update is called once per frame
-    void Update()
+    public void playWalkingStepsAudio()
     {
-        if (rb.velocity.magnitude > 0)
-        {
-            typeGround();
-        }
+         source.clip = playerFootStepsWalking;
+        currentClipPlaying = ClipPlaying.walking;
+        source.Stop();
+        source.Play();
+         Debug.Log("walk audio");
     }
 
-    void typeGround()
+    public void playRunningStepsAudio()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
-        {
-            if (hit.collider.CompareTag("Exterior"))
-            {
-                playFootStepsAudio(AOutdoors);
-            }
-        }
+        source.clip = playerFootStepsRunning;
+        currentClipPlaying = ClipPlaying.running;
+        source.Stop();
+        source.Play();
+        Debug.Log("walk audio");
     }
-
-    void playFootStepsAudio(AudioClip audio)
+    public void stopStepsAudio()
     {
-        ASource.pitch = 0.5f;
-        //ASource.PlayOneShot(audio);
+        source.Stop();
+        currentClipPlaying = ClipPlaying.idle;
+        Debug.Log("stop audio");
     }
 }
