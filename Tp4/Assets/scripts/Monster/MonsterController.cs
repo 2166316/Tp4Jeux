@@ -12,8 +12,8 @@ public class MonsterController : NetworkBehaviour
     public AudioClip normalAudioClip; // Audio clip for normal movement
     public AudioClip bitingAudioClip; // Audio clip for biting
 
-    private float minSpeed = 2f;
-    private float maxSpeed = 5f;
+    private float minSpeed = 2.5f;
+    private float maxSpeed = 6.5f;
     private float currentSpeed = 0f;
     private float speedIncrement = 0.15f;
 
