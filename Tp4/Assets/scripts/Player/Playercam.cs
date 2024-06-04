@@ -30,7 +30,7 @@ public class Playercam : NetworkBehaviour
         rotationY = Mathf.Clamp(rotationY, -90f, 90f);
         transform.localRotation = Quaternion.Euler(-rotationY, 0f, 0f);
 
-        if (playerController.getIsDeadVal())
+        if (playerController.GetIsDeadVal())
             return;
         player.transform.localRotation = Quaternion.Euler(0f, rotationX, 0f);
     }

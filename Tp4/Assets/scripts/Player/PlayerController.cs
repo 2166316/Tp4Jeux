@@ -25,18 +25,59 @@ public class PlayerController : NetworkBehaviour
 
     private AudioPlayer audioPlayer;
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsLocalPlayer || !IsOwner)
+            return;
+
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+
+        //callback
+        posNetwork.OnValueChanged += OnCurrentSpawn;
+        if (IsOwner)
+        {
+            SpawnClientRPC();
+        }
+        isGrounded = true;
+        //init des gameobjs 
+        loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
+        playerCam = GetComponentInChildren<Camera>();
+        playerAudio = GetComponentInChildren<AudioListener>();
+        debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
+
+        //vue jeux
+        GoToGame();
+        base.OnNetworkSpawn();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        //vue connection
+        GoToConnection();
+        base.OnNetworkDespawn();
+    }
+
+    public void KillPlayer()
+    {
+        if (!IsOwner || !IsLocalPlayer)
+            return;
+
+        animator.SetBool("isDead", true);
+        gameObject.tag = "Untagged";
+        audioPlayer.stopStepsAudio();
+        KillPlayerRpc();
+        Debug.Log("Player died");
+    }
 
     [Rpc(SendTo.Server)]
     public void KillPlayerRpc()
     {
         isDead.Value = true;
-        animator.SetBool("isDead", true);
-        gameObject.tag = "Untagged";
-        Debug.Log("Player died");
-        audioPlayer.stopStepsAudio();
     }
 
-    public bool getIsDeadVal()
+    public bool GetIsDeadVal()
     {
         return isDead.Value;
     }
@@ -65,6 +106,27 @@ public class PlayerController : NetworkBehaviour
         {
             Debug.Log("loginPanel est null");
         }
+
+        if (IsHost && IsOwner)
+        {
+            ShutdownNetworkServerRpc();
+        }
+    }
+
+
+    [ServerRpc]
+    private void SetJumpAnimationServerRpc(float speed)
+    {
+        if (!IsLocalPlayer)
+            return;
+
+    }
+
+
+    [ServerRpc]
+    void ShutdownNetworkServerRpc()
+    {
+        NetworkManager.Singleton.Shutdown();
     }
 
     //vue game
@@ -99,45 +161,6 @@ public class PlayerController : NetworkBehaviour
         // audioPlayer.playWalkingStepsAudio();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        if (!IsLocalPlayer || !IsOwner)
-            return;
-
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-
-        //callback
-        posNetwork.OnValueChanged += OnCurrentSpawn;
-        if (IsOwner)
-        {
-            SpawnClientRPC();
-        }
-        isGrounded = true;
-        //init des gameobjs 
-        loginPanel = GameObject.FindGameObjectWithTag("LoginPanel");
-        playerCam = GetComponentInChildren<Camera>();
-        playerAudio = GetComponentInChildren<AudioListener>();
-        debutCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        debutAudio = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioListener>();
-
-        //vue jeux
-        GoToGame();
-        base.OnNetworkSpawn();
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        //vue connection
-
-        if (NetworkManager.Singleton.IsHost )
-        {
-            NetworkManager.Singleton.Shutdown();
-        }
-        GoToConnection();
-        base.OnNetworkDespawn();
-    }
-
     public void OnCurrentSpawn(Vector3 previous, Vector3 current)
     {
         //change la position quand le networkvariable change
@@ -167,6 +190,8 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveX, 0f, moveZ).normalized * (moveSpeed * multiplier);
         rb.MovePosition(rb.position + transform.TransformDirection(movement) * Time.fixedDeltaTime);
         float speed = (movement.magnitude);
+
+        //animator sync
         animator.SetFloat("Blend", speed);
 
         //Debug.Log(animator.GetFloat("Blend"));

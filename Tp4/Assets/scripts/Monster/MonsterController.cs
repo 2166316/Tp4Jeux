@@ -79,7 +79,7 @@ public class MonsterController : NetworkBehaviour
         {
             audioSource.Stop();
             PlayerController cont = other.GetComponent<PlayerController>();
-            cont.KillPlayerRpc();
+            cont.KillPlayer();
             MonsterAggro.instance.playerDead = true;
             StartCoroutine(BiteRoutine());
         }

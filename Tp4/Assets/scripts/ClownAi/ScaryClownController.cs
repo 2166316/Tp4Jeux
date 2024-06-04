@@ -87,7 +87,7 @@ public class ScaryClownController : NetworkBehaviour
         if(other.tag == "Player")
         {
             PlayerController cont =other.GetComponent<PlayerController>();
-            cont.KillPlayerRpc();
+            cont.KillPlayer();
             DespawnRpc();
         }
 

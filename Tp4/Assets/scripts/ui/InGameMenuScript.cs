@@ -56,13 +56,13 @@ public class InGameMenuScript : NetworkBehaviour
             if (!Equals(relay, null))
             {
                 string code = relay.getCodeConnexion();
-                if (code != null)
+                /*if (code != null)
                 {
                     Debug.Log("THE CODE IS :: " + code);
                 } else
                 {
                     Debug.Log("ERROR: NOT ABLE TO FETCH CONNEXION CODE");
-                }
+                }*/
             }
         }
     }
@@ -103,7 +103,7 @@ public class InGameMenuScript : NetworkBehaviour
             }
         }
         catch (Exception e) { 
-            Debug.LogException(e);
+           // Debug.LogException(e);
         }
     }
 

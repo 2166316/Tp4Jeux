@@ -1530,6 +1530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633b1be4878e591449d166d9a669fae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
 --- !u!65 &7127494544153218576
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1754,9 +1755,9 @@ GameObject:
   - component: {fileID: 2203322373762682915}
   - component: {fileID: -1926304319953232439}
   - component: {fileID: 7645608482409198535}
-  - component: {fileID: 7036996185218180064}
   - component: {fileID: -4228610753894439013}
   - component: {fileID: 2098558859377980374}
+  - component: {fileID: -2273357869301816711}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1851,7 +1852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3416881560
+  GlobalObjectIdHash: 4187080557
   InScenePlacedSourceGlobalObjectIdHash: 4187080557
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1899,7 +1900,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ac8eb3ed7f6efd2429b57567ffee4c5b, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -1952,20 +1953,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7036996185218180064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206868052865762675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 2203322373762682915}
 --- !u!114 &-4228610753894439013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2078,6 +2065,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2273357869301816711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5206868052865762675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d242627bf6c724886492ae6461bdb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 2203322373762682915}
 --- !u!1 &5399118589662974295
 GameObject:
   m_ObjectHideFlags: 0
