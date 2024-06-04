@@ -5508,6 +5508,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: bce99ade65d5fee418c6e9541397fb3e, type: 3}
+--- !u!1 &258680789 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4638983760601356374, guid: 712d7f78da191bd42b462bda6433bbfa, type: 3}
+  m_PrefabInstance: {fileID: 266509400}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &261530443 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4195605851267352328, guid: e663086ec318b7546bf73d022be76157, type: 3}
@@ -7424,6 +7429,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: bce99ade65d5fee418c6e9541397fb3e, type: 3}
+--- !u!1 &799514314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1733853028139931471, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
+  m_PrefabInstance: {fileID: 1586401798471245681}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &800347341 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2212693096675655215, guid: e663086ec318b7546bf73d022be76157, type: 3}
@@ -16356,6 +16366,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1053935987}
     m_Modifications:
     - target: {fileID: 1483509065169581184, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
+      propertyPath: monster
+      value: 
+      objectReference: {fileID: 258680789}
+    - target: {fileID: 1483509065169581184, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
       propertyPath: winCanvas
       value: 
       objectReference: {fileID: 4985689}
@@ -16414,13 +16428,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1733853028139931471, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1586401798471245687}
   m_SourcePrefab: {fileID: 100100000, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
 --- !u!4 &1586401798471245682 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4428852731841126928, guid: 3dc731d44a387f043abd173241ecb70b, type: 3}
   m_PrefabInstance: {fileID: 1586401798471245681}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1586401798471245687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799514314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3196924573
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

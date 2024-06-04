@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -5,11 +6,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WinController : MonoBehaviour
+public class WinController : NetworkBehaviour
 {
     public Button mainMenuButton;
     public GameObject baseCanvas;
     public GameObject winCanvas;
+    public GameObject monster;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +42,18 @@ public class WinController : MonoBehaviour
             Cursor.visible = true;
             baseCanvas.SetActive(false);
             winCanvas.SetActive(true);
+
+            killmonsterRpc();
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    void killmonsterRpc()
+    {
+        if (IsServer && monster != null)
+        {
+            NetworkObject networkObject = monster.GetComponent<NetworkObject>();
+            networkObject.Despawn();
         }
     }
 }
