@@ -52,18 +52,7 @@ public class InGameMenuScript : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             ToggleMenu();
-            //get relay code
-            if (!Equals(relay, null))
-            {
-                string code = relay.getCodeConnexion();
-                /*if (code != null)
-                {
-                    Debug.Log("THE CODE IS :: " + code);
-                } else
-                {
-                    Debug.Log("ERROR: NOT ABLE TO FETCH CONNEXION CODE");
-                }*/
-            }
+            
         }
     }
 

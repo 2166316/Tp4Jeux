@@ -16,7 +16,7 @@ public class Relay : NetworkBehaviour
     [SerializeField] private Button loginButton;
     [SerializeField] private Button hostButton;
     [SerializeField] private int nbPlayerMax = 4;
-    [SerializeField] private NetworkVariable<FixedString4096Bytes> codeConnexion = new NetworkVariable<FixedString4096Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    //[SerializeField] private NetworkVariable<FixedString4096Bytes> codeConnexion = new NetworkVariable<FixedString4096Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     // Start is called before the first frame update
     async void Start()
@@ -53,24 +53,6 @@ public class Relay : NetworkBehaviour
         });
     }
 
-
-    private void Update()
-    {
-        
-    }
-
-    public string getCodeConnexion()
-    {
-        string code = codeConnexion.Value.ToString();
-        return code;
-    }
-
-    [Rpc(SendTo.Server)]
-    public void ChangeCodeRpc(string connexionCode) {
-        codeConnexion.Value = connexionCode;
-        
-    }
-
     //création du relay et du host
     public async void CreateRelay()
     {
@@ -80,18 +62,10 @@ public class Relay : NetworkBehaviour
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(nbPlayerMax);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-            ChangeCodeRpc(joinCode);
-            Debug.Log("Code pour rejoindre: "+joinCode);
 
-            GameObject codeText = GameObject.FindWithTag("RelayCode");
-            if (codeText != null)
-            {
-                Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-                TextMeshProUGUI textComponent = codeText.GetComponent<TextMeshProUGUI>();
-                textComponent.text = "Code : " + joinCode;
-            } else {
-                Debug.Log("CODE UI ELEMENT NOT FOUND ");
-            }
+            Debug.Log("Code pour rejoindre: "+joinCode);
+            textVal.text = "Code : " + joinCode;
+
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
