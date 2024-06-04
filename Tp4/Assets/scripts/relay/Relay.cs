@@ -12,11 +12,13 @@ using TMPro;
 
 public class Relay : NetworkBehaviour
 {
-    [SerializeField] private TMPro.TMP_Text textVal;
+    [SerializeField] private TMPro.TMP_Text textCodeEntry;
+    [SerializeField] private TMPro.TMP_Text textCodeActual;
+
     [SerializeField] private Button loginButton;
     [SerializeField] private Button hostButton;
     [SerializeField] private int nbPlayerMax = 4;
-    //[SerializeField] private NetworkVariable<FixedString4096Bytes> codeConnexion = new NetworkVariable<FixedString4096Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<FixedString4096Bytes> codeConnexion = new NetworkVariable<FixedString4096Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     // Start is called before the first frame update
     async void Start()
@@ -43,14 +45,19 @@ public class Relay : NetworkBehaviour
 
         loginButton.onClick.AddListener(() =>
         {
-            Debug.Log(textVal.text);
-            JoinRelay(textVal.text);
+            Debug.Log(textCodeEntry.text);
+            JoinRelay(textCodeEntry.text);
         });
 
         hostButton.onClick.AddListener(() =>
         {
             CreateRelay();
         });
+    }
+
+    [Rpc(SendTo.Server)]
+    public void ChangeCodeRpc(string connexionCode) {
+        codeConnexion.Value = connexionCode;
     }
 
     //création du relay et du host
@@ -62,10 +69,12 @@ public class Relay : NetworkBehaviour
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(nbPlayerMax);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-
+            ChangeCodeRpc(joinCode);
             Debug.Log("Code pour rejoindre: "+joinCode);
-            textVal.text = "Code : " + joinCode;
 
+
+            textCodeActual.text = "Code : " + joinCode;
+            
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
