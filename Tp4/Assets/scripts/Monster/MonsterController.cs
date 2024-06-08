@@ -13,9 +13,10 @@ public class MonsterController : NetworkBehaviour
     public AudioClip bitingAudioClip; // Audio clip for biting
 
     private float minSpeed = 2.5f;
-    private float maxSpeed = 6.5f;
+    private float maxSpeed = 6.1f;
     private float currentSpeed = 0f;
-    private float speedIncrement = 0.15f;
+    private float speedIncrement = 0.10f;
+    private float wanderTimer = 15f;
 
     public NavMeshAgent agent;
     private float timer;
@@ -28,8 +29,10 @@ public class MonsterController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timer = wanderTimer;
+
         instance = this;
-        timer = 0f;
+
         navMeshData = NavMesh.CalculateTriangulation();
 
         agent.speed = minSpeed;
@@ -42,6 +45,8 @@ public class MonsterController : NetworkBehaviour
     {
         if (!IsServer) return; // Ensure this runs only on the server in a networked environment
 
+        timer += Time.deltaTime;
+
         if (aggroed && !biting)
         {
             IncreaseSpeed();
@@ -53,16 +58,19 @@ public class MonsterController : NetworkBehaviour
 
         animator.SetFloat("speed", currentSpeed);
 
-        // Check if the agent has reached its destination
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && !isWaiting)
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-            {
-                StartCoroutine(WaitAndWander());
-            }
+            timer = wanderTimer + 1f;
         }
 
-        // Check if the agent is stopped
+            if (timer >= wanderTimer && !biting)
+        {
+            Vector3 newPos = GetRandomPointOnNavMesh();
+            agent.SetDestination(newPos);
+            timer = 0f;
+        }
+
+            // Check if the agent is stopped
         if (agent.velocity.sqrMagnitude < 0.01f)
         {
             animator.SetBool("isStopped", true);
@@ -100,20 +108,11 @@ public class MonsterController : NetworkBehaviour
         float animationLength = animationClip.length;
         yield return new WaitForSeconds(animationLength * 3);
 
-        timer = 1f;
+        timer = wanderTimer + 1f;
         animator.SetBool("biting", false);
         biting = false;
         agent.isStopped = false; // Resume the NavMeshAgent
         audioSource.clip = normalAudioClip;
-    }
-
-    private IEnumerator WaitAndWander()
-    {
-        isWaiting = true;
-        yield return new WaitForSeconds(2f); // Wait for 2 seconds
-        Vector3 newPos = GetRandomPointOnNavMesh();
-        agent.SetDestination(newPos);
-        isWaiting = false;
     }
 
     private Vector3 GetRandomPointOnNavMesh()

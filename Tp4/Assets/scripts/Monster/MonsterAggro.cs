@@ -79,7 +79,7 @@ public class MonsterAggro : MonoBehaviour
 
     private IEnumerator DelayedReset()
     {
-        yield return new WaitForSeconds(2f); // Wait for 2 seconds
+        yield return new WaitForSeconds(3f); // Wait for 2 seconds
         resetMonster();
     }
 
