@@ -48,8 +48,6 @@ public class SpawnClownAI : NetworkBehaviour
     [ServerRpc(RequireOwnership =false)]
     private void InstantieClownIdleServerRpc()
     {
-
-
         int position = Random.Range(0, listDePositionPredefiniePourClownIdle.Count);
 
         clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClownIdle[position], new Quaternion(0f, 180f, 0f, 0f));
@@ -93,21 +91,15 @@ public class SpawnClownAI : NetworkBehaviour
            
             if (!clownIsActive.Value)
             {
-
                     StartCoroutine(SpawnClownAtRandomMoment());
                     ChangeClownActivityTrueRpc();
-            
- 
             }     
         }
 
         if (other.tag == "Clown")
         {
-
+            other.GetComponent<ScaryClownController>().DespawnRpcServerRpc();
                 ChangeClownActivityFalseRpc();
-                
-
-
         }
     }
 
