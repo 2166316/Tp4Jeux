@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,8 +10,9 @@ public class SpawnClownAI : NetworkBehaviour
     [SerializeField] private GameObject clownAIPrefab;
 
     private List<Vector3> listDePositionPredefiniePourClown;
-    private GameObject clownAINetworkObjectRef;
-    private NetworkVariable<bool> clownIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private GameObject clownAINetworkObjectRef = null;
+   // private NetworkVariable<GameObject> clownAINetworkObjectRef = new NetworkVariable<GameObject>(null, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<bool> clownIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private List<Vector3> listDePositionPredefiniePourClownIdle;
 
@@ -22,7 +24,6 @@ public class SpawnClownAI : NetworkBehaviour
             new Vector3(-19f, 74f,-137.3f),
             new Vector3(29f, 68f,-120f),
             new Vector3(39f, 74f,-145f),
-
         };
 
         listDePositionPredefiniePourClownIdle = new List<Vector3>
@@ -44,8 +45,11 @@ public class SpawnClownAI : NetworkBehaviour
         clownIsActive.Value = false;
     }
 
-    private void InstantieClownIdle()
+    [ServerRpc(RequireOwnership =false)]
+    private void InstantieClownIdleServerRpc()
     {
+
+
         int position = Random.Range(0, listDePositionPredefiniePourClownIdle.Count);
 
         clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClownIdle[position], new Quaternion(0f, 180f, 0f, 0f));
@@ -60,14 +64,17 @@ public class SpawnClownAI : NetworkBehaviour
             networkObject.Spawn();
             //pour indiquer au clown qu'il est idle
             controllerClown.ChangeMenacingLookRpc();
-        }  
+        }
     }
 
-    private void InstantieClownActive()
+    [ServerRpc(RequireOwnership = false)]
+    private void InstantieClownActiveServerRpc()
     {
+
+
         int position = Random.Range(0, listDePositionPredefiniePourClown.Count);
 
-        clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClown[position], new Quaternion(0f, 0f, 0f, 0f));
+        clownAINetworkObjectRef =  Instantiate(clownAIPrefab, listDePositionPredefiniePourClown[position], new Quaternion(0f, 0f, 0f, 0f));
 
         //met le clown  actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
@@ -81,44 +88,49 @@ public class SpawnClownAI : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (!IsServer)
-       //     return;
-        
-
         if (other.tag == "Player")
         {
            
             if (!clownIsActive.Value)
             {
-                StartCoroutine(spawnClownAtRandomMoment());
-                ChangeClownActivityTrueRpc();
-                
+
+                    StartCoroutine(SpawnClownAtRandomMoment());
+                    ChangeClownActivityTrueRpc();
+            
+ 
             }     
         }
 
         if (other.tag == "Clown")
         {
-            ChangeClownActivityFalseRpc();
+
+                ChangeClownActivityFalseRpc();
+                
+
+
         }
     }
 
-    private IEnumerator spawnClownAtRandomMoment()
+    private  IEnumerator SpawnClownAtRandomMoment()
     {
-        InstantieClownIdle();
-        //int tempEnSecondes = Random.Range(15, 61);
+
+        InstantieClownIdleServerRpc();
+
+        // Wait for the clown to spawn and initialize clownAINetworkObjectRef
+       // yield return new WaitUntil(() => clownAINetworkObjectRef != null);
+
         int tempEnSecondes = Random.Range(2, 4);
-
         yield return new WaitForSeconds(tempEnSecondes);
-
-        ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
-        controllerClown.DespawnRpc();   
-
-        Debug.Log(tempEnSecondes);
-
+        Debug.Log("test1");
+        ScaryClownController scaryClownController = GameObject.FindGameObjectWithTag("Clown").GetComponent<ScaryClownController>();
+        if (scaryClownController != null)
+        {
+            scaryClownController.DespawnRpcServerRpc();
+        }
+        Debug.Log("test2");
         tempEnSecondes = Random.Range(2, 5);
-       // tempEnSecondes = Random.Range(15, 61);
         yield return new WaitForSeconds(tempEnSecondes);
-        InstantieClownActive();
+        InstantieClownActiveServerRpc();
     }
 
 

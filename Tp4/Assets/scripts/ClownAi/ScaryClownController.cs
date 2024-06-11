@@ -84,16 +84,19 @@ public class ScaryClownController : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        Debug.Log("clown collide ");
+
+        if (other.tag == "Player")
         {
-            PlayerController cont =other.GetComponent<PlayerController>();
+            Debug.Log("clown collide avec  le player");
+            PlayerController cont = other.GetComponent<PlayerController>();
             cont.KillPlayer();
-            DespawnRpc();
+            DespawnRpcServerRpc();
         }
 
         if (other.tag == "ClownStart")
         {
-            DespawnRpc();
+            DespawnRpcServerRpc();
         }
     }
 
@@ -134,8 +137,8 @@ public class ScaryClownController : NetworkBehaviour
         
     }
 
-    [Rpc(SendTo.Server)]
-    public void DespawnRpc()
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnRpcServerRpc()
     {
         try
         {
@@ -144,6 +147,7 @@ public class ScaryClownController : NetworkBehaviour
         }
         catch
         {
+            Debug.Log("erreur despawn clown");
         }
     }
 
