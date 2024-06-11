@@ -130,30 +130,28 @@ public class ScaryClownController : NetworkBehaviour
 
         foreach (var player in NetworkManager.Singleton.ConnectedClients)
         {
-            //skip le reste si null
             if (player.Value.PlayerObject == null) continue;
 
-            distanceTmp = 0;
-            if((distanceTmp = Vector3.Distance(player.Value.PlayerObject.transform.position, this.transform.position)) <= minDistance)
+            distanceTmp = Vector3.Distance(player.Value.PlayerObject.transform.position, transform.position);
+            if (distanceTmp <= minDistance && player.Value.PlayerObject.GetComponent<PlayerController>().isDead.Value != true)
             {
-                if (player.Value.PlayerObject.GetComponent<PlayerController>().isDead.Value != true)
-                {
-                    minDistance = distanceTmp;
-                    playerid = player.Key;
-                }
+                minDistance = distanceTmp;
+                playerid = player.Key;
             }
         }
-        Debug.Log("closest player: "+playerid);
-        NetworkClient networkClient = null;
-        NetworkManager.Singleton.ConnectedClients.TryGetValue(playerid, out networkClient);
+
 
         Vector3 closestPlayerPosition = transform.position;
-        if(networkClient != null)
+        NetworkClient networkClient = null;
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(playerid, out networkClient) && networkClient != null)
         {
-            closestPlayerPosition = networkClient.PlayerObject.transform.position;  
+            destination = networkClient.PlayerObject.transform.position;
         }
-
-        destination = closestPlayerPosition;
+        else
+        {
+            // If no living player is found, fallback to clown's position
+            destination = transform.position;
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
