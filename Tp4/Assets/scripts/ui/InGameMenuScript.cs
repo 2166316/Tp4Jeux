@@ -13,6 +13,8 @@ public class InGameMenuScript : NetworkBehaviour
     private GameObject panel;
     [SerializeField]private Button disconnectButton;
     private Relay relay;
+    [SerializeField] private GameObject canvas;
+    
     private void Start()
     {
         
@@ -24,6 +26,7 @@ public class InGameMenuScript : NetworkBehaviour
             disconnectButton.onClick.AddListener(() =>
             {
                 Debug.Log("test1");
+                canvas.SetActive(true);
                 DisconnectServerRpc();
             });
         }

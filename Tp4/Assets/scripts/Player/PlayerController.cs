@@ -25,10 +25,15 @@ public class PlayerController : NetworkBehaviour
 
     private AudioPlayer audioPlayer;
 
+    private GameObject canvas;
+
     public override void OnNetworkSpawn()
     {
         if (!IsLocalPlayer || !IsOwner)
             return;
+
+        canvas = GameObject.Find("CanvasRetour");
+        canvas.SetActive(false);
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
