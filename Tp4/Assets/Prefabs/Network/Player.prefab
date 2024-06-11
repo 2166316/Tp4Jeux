@@ -1888,7 +1888,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  jumpForce: 4
+  jumpForce: 5
+  isDead:
+    m_InternalValue: 0
 --- !u!95 &2203322373762682915
 Animator:
   serializedVersion: 5
