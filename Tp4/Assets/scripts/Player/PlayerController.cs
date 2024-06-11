@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3 spawnPoint = new Vector3(9.717109f, 66f, -163f);
     private NetworkVariable<Vector3> posNetwork = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private Camera playerCam;
     private AudioListener playerAudio;
@@ -66,8 +66,8 @@ public class PlayerController : NetworkBehaviour
 
     public void KillPlayer()
     {
-        if (!IsOwner || !IsLocalPlayer)
-            return;
+       // if (!IsOwner || !IsLocalPlayer)
+       //     return;
 
         animator.SetBool("isDead", true);
         gameObject.tag = "Untagged";
@@ -117,16 +117,6 @@ public class PlayerController : NetworkBehaviour
             ShutdownNetworkServerRpc();
         }
     }
-
-
-    [ServerRpc]
-    private void SetJumpAnimationServerRpc(float speed)
-    {
-        if (!IsLocalPlayer)
-            return;
-
-    }
-
 
     [ServerRpc]
     void ShutdownNetworkServerRpc()
