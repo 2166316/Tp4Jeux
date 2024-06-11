@@ -18,7 +18,6 @@ TagManager:
   - PlayerCamera
   - Floor
   - RelayCode
-  - ClownStop
   layers:
   - Default
   - TransparentFX
