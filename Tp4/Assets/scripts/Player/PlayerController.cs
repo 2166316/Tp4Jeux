@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour
 {
     public float moveSpeed = 3.5f;
-    public float jumpForce = 4f;
+    public float jumpForce = 5f;
     private float multiplier = 1f;
     private Rigidbody rb;
     private Animator animator;
