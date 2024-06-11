@@ -69,7 +69,7 @@ public class SpawnClownAI : NetworkBehaviour
 
         clownAINetworkObjectRef = Instantiate(clownAIPrefab, listDePositionPredefiniePourClown[position], new Quaternion(0f, 0f, 0f, 0f));
 
-        //met le clown � actif
+        //met le clown  actif
         ScaryClownController controllerClown = clownAINetworkObjectRef.GetComponent<ScaryClownController>();
         //controllerClown.ChangeClownActivityRpc();
         NetworkObject networkObject = clownAINetworkObjectRef.GetComponent<NetworkObject>();
@@ -81,8 +81,8 @@ public class SpawnClownAI : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer)
-            return;
+        //if (!IsServer)
+       //     return;
         
 
         if (other.tag == "Player")
