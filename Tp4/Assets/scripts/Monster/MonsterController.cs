@@ -26,6 +26,8 @@ public class MonsterController : NetworkBehaviour
     private bool biting = false;
     private bool isWaiting = false;
 
+    private float resetTimer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,11 +60,6 @@ public class MonsterController : NetworkBehaviour
 
         animator.SetFloat("speed", currentSpeed);
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            timer = wanderTimer + 1f;
-        }
-
             if (timer >= wanderTimer && !biting)
         {
             Vector3 newPos = GetRandomPointOnNavMesh();
@@ -73,6 +70,12 @@ public class MonsterController : NetworkBehaviour
             // Check if the agent is stopped
         if (agent.velocity.sqrMagnitude < 0.01f)
         {
+            resetTimer += Time.deltaTime;
+
+            if (resetTimer > 2f){
+                timer = wanderTimer + 1f;
+                resetTimer = 0f;
+            }
             animator.SetBool("isStopped", true);
         }
         else
