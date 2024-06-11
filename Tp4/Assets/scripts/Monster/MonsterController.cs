@@ -60,6 +60,10 @@ public class MonsterController : NetworkBehaviour
 
         animator.SetFloat("speed", currentSpeed);
 
+        if (agent.pathPending) {
+            resetTimerM();
+        }
+        
             if (timer >= wanderTimer && !biting)
         {
             Vector3 newPos = GetRandomPointOnNavMesh();
@@ -68,19 +72,25 @@ public class MonsterController : NetworkBehaviour
         }
 
             // Check if the agent is stopped
-        if (agent.velocity.sqrMagnitude < 0.01f)
+        if (agent.velocity.sqrMagnitude < 0.01f && !biting)
         {
-            resetTimer += Time.deltaTime;
-
-            if (resetTimer > 2f){
-                timer = wanderTimer + 1f;
-                resetTimer = 0f;
-            }
+            resetTimerM();
             animator.SetBool("isStopped", true);
         }
         else
         {
             animator.SetBool("isStopped", false);
+        }
+    }
+
+    void resetTimerM()
+    {
+        resetTimer += Time.deltaTime;
+
+        if (resetTimer > 2f)
+        {
+            timer = wanderTimer + 1f;
+            resetTimer = 0f;
         }
     }
 

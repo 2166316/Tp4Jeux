@@ -5552,7 +5552,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5869927283077188292, guid: 712d7f78da191bd42b462bda6433bbfa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.87
+      value: -5.32
       objectReference: {fileID: 0}
     - target: {fileID: 5869927283077188292, guid: 712d7f78da191bd42b462bda6433bbfa, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5560,7 +5560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5869927283077188292, guid: 712d7f78da191bd42b462bda6433bbfa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -128.04
+      value: -103.12
       objectReference: {fileID: 0}
     - target: {fileID: 5869927283077188292, guid: 712d7f78da191bd42b462bda6433bbfa, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7887,7 +7887,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &783434868
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17257,6 +17257,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
+  - {fileID: 1053935987}
   - {fileID: 988792821}
   - {fileID: 18878267}
   - {fileID: 1837603092}
@@ -17264,7 +17265,6 @@ SceneRoots:
   - {fileID: 1469279349}
   - {fileID: 783434869}
   - {fileID: 300769219}
-  - {fileID: 1053935987}
   - {fileID: 266509400}
   - {fileID: 4985688}
   - {fileID: 903403068}
