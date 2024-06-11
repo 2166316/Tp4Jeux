@@ -113,14 +113,14 @@ public class SpawnClownAI : NetworkBehaviour
 
         int tempEnSecondes = Random.Range(2, 4);
         yield return new WaitForSeconds(tempEnSecondes);
-        Debug.Log("test1");
+
         ScaryClownController scaryClownController = GameObject.FindGameObjectWithTag("Clown").GetComponent<ScaryClownController>();
         if (scaryClownController != null)
         {
             scaryClownController.DespawnRpcServerRpc();
         }
-        Debug.Log("test2");
-        tempEnSecondes = Random.Range(2, 5);
+
+        tempEnSecondes = Random.Range(15, 60);
         yield return new WaitForSeconds(tempEnSecondes);
         InstantieClownActiveServerRpc();
     }
