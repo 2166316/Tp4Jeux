@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -25,8 +26,12 @@ public class ScaryClownController : NetworkBehaviour
 
     private NetworkVariable<bool> lookingMenacing = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+
+    private SpawnClownAI scaryClownSpawner;
     public override void OnNetworkSpawn()
     {
+         scaryClownSpawner = GameObject.FindGameObjectWithTag("ClownStart").GetComponent<SpawnClownAI>();
+
         audioSource = GetComponentInChildren<AudioSource>();
         destination = transform.position;
         //nav agent 
@@ -40,9 +45,11 @@ public class ScaryClownController : NetworkBehaviour
         animatorMenacingHash = Animator.StringToHash(MENACING);
 
         //trouve tous les players 
-        GameObject.FindGameObjectsWithTag("Player").ToList().ForEach(poubelle => players.Add(poubelle.GetComponent<NetworkObject>()));
+        //GameObject.FindGameObjectsWithTag("Player").ToList().ForEach(player => players.Add(player.GetComponent<NetworkObject>()));
         //ensuite set la destination au player le plus proche
         FindClosestPlayer();
+
+
 
         base.OnNetworkSpawn();
     }
@@ -58,6 +65,7 @@ public class ScaryClownController : NetworkBehaviour
     {
         if(lookingMenacing.Value)
             return;
+        
         
 
         //action du clown quand actif
@@ -77,6 +85,11 @@ public class ScaryClownController : NetworkBehaviour
             {
                 audioSource.Play();
             }
+            
+            if(audioSource != null &&  currentSpeed <1 && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
         }
         //Debug.Log(navAgent.velocity.magnitude);
 
@@ -91,12 +104,15 @@ public class ScaryClownController : NetworkBehaviour
             Debug.Log("clown collide avec  le player");
             PlayerController cont = other.GetComponent<PlayerController>();
             cont.KillPlayer();
+            scaryClownSpawner.ChangeClownActivityFalseRpc();
             DespawnRpcServerRpc();
         }
 
-        if (other.tag == "ClownStart")
+        if (other.tag == "ClownStop")
         {
+            scaryClownSpawner.ChangeClownActivityFalseRpc();
             DespawnRpcServerRpc();
+
         }
     }
 
@@ -108,22 +124,26 @@ public class ScaryClownController : NetworkBehaviour
 
         //id player plus proche du clown
         ulong playerid = 0;
-        //ne part pas après les player si il sont plus de 10 de distance
-        float minDistance = 10;
+        //ne part pas après les player si il sont plus de 40 de distance
+        float minDistance = 1;
+        float distanceTmp = 0;
 
         foreach (var player in NetworkManager.Singleton.ConnectedClients)
         {
             //skip le reste si null
             if (player.Value.PlayerObject == null) continue;
 
-            float distanceTmp = 0;
+            distanceTmp = 0;
             if((distanceTmp = Vector3.Distance(player.Value.PlayerObject.transform.position, this.transform.position)) <= minDistance)
             {
-                minDistance = distanceTmp;
-                playerid = player.Key;
+                if (player.Value.PlayerObject.GetComponent<PlayerController>().isDead.Value != true)
+                {
+                    minDistance = distanceTmp;
+                    playerid = player.Key;
+                }
             }
         }
-
+        Debug.Log("closest player: "+playerid);
         NetworkClient networkClient = null;
         NetworkManager.Singleton.ConnectedClients.TryGetValue(playerid, out networkClient);
 
@@ -134,7 +154,6 @@ public class ScaryClownController : NetworkBehaviour
         }
 
         destination = closestPlayerPosition;
-        
     }
 
     [ServerRpc(RequireOwnership = false)]
