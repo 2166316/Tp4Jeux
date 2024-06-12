@@ -123,28 +123,37 @@ public class ScaryClownController : NetworkBehaviour
             return ;
 
         //id player plus proche du clown
-        ulong playerid = 0;
+        ulong playerid = 500;
         //ne part pas après les player si il sont plus de 40 de distance
-        float minDistance = 1;
-        float distanceTmp = 0;
+        float minDistance = 80;
+        float distanceTmpActuel = 0;
+
+        //float nbPlayer = NetworkManager.Singleton.ConnectedClients.Count;
+        //Debug.LogWarning("nb player: "+nbPlayer);
 
         foreach (var player in NetworkManager.Singleton.ConnectedClients)
         {
             if (player.Value.PlayerObject == null) continue;
 
-            distanceTmp = Vector3.Distance(player.Value.PlayerObject.transform.position, transform.position);
-            if (distanceTmp <= minDistance && player.Value.PlayerObject.GetComponent<PlayerController>().isDead.Value != true)
+            distanceTmpActuel = Vector3.Distance(player.Value.PlayerObject.transform.position, transform.position);
+            bool playerActualisDead = player.Value.PlayerObject.GetComponent<PlayerController>().isDead.Value;
+            //Debug.LogWarning("distanceTmpActuel: " + distanceTmpActuel);
+            //Debug.LogWarning("minDistance: " + minDistance);
+            //Debug.LogWarning("playerActualisDead: " + playerActualisDead.ToString());
+            if (distanceTmpActuel <= minDistance && !playerActualisDead)
             {
-                minDistance = distanceTmp;
+                minDistance = distanceTmpActuel;
                 playerid = player.Key;
+               // Debug.LogWarning("player chosen: " + player.Key);
             }
         }
 
 
         Vector3 closestPlayerPosition = transform.position;
         NetworkClient networkClient = null;
-        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(playerid, out networkClient) && networkClient != null)
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(playerid, out networkClient) && networkClient != null && playerid<500)
         {
+            //Debug.LogWarning("player chosen: " + networkClient.ClientId);
             destination = networkClient.PlayerObject.transform.position;
         }
         else
