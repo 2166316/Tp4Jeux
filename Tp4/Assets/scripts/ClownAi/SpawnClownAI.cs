@@ -120,8 +120,8 @@ public class SpawnClownAI : NetworkBehaviour
             scaryClownController.DespawnRpcServerRpc();
         }
 
-        //tempEnSecondes = Random.Range(15, 60);
-        tempEnSecondes = Random.Range(1, 3);
+        tempEnSecondes = Random.Range(15, 60);
+        //tempEnSecondes = Random.Range(1, 3);
         yield return new WaitForSeconds(tempEnSecondes);
         InstantieClownActiveServerRpc();
     }

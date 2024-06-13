@@ -124,7 +124,7 @@ public class ScaryClownController : NetworkBehaviour
 
         //id player plus proche du clown
         ulong playerid = 500;
-        //ne part pas après les player si il sont plus de 40 de distance
+        //ne part pas après les player si il sont plus de 80 de distance
         float minDistance = 80;
         float distanceTmpActuel = 0;
 
